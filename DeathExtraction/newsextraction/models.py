@@ -25,12 +25,16 @@ class rssdata(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'rssdata'
-        ordering = ('-date', 'location')
+        verbose_name = 'rssdata' #human readable alias for object
+        ordering = ('-date', 'location') #sorting type in list
 
+
+#override default save method 
     def save(self, *args, **kwargs):
         super(rssdata, self).save(*args, **kwargs)
 
+
+#Just to identify the object by its header
     def __str__(self):
         return self.header
 
