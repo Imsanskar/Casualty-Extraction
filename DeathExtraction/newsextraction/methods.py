@@ -44,7 +44,7 @@ def initial_check():
             
             extract(links[i], news_story, title[i])       
 
-
+#Apply tokenization and tagging
 def extract(link, news_story, title):
     if isinstance(news_story, str):
         news = Tokenize(str(news_story, 'utf-8'))
@@ -80,5 +80,3 @@ def extract(link, news_story, title):
     #                  month=month,
     #                  year=year,
     #                  )
-
-initial_check()
