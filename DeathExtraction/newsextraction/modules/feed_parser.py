@@ -38,5 +38,3 @@ def initial_check():
             print(news_story)
             
             # extract(links[i], news_story, title[i])       
-
-initial_check()
