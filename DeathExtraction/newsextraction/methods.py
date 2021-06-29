@@ -36,11 +36,11 @@ def initial_check():
         title.append(post.title_detail.value)
         
     #oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
-    
+    extractor = Goose()
     for i in range(0, len(links)):
         #if links[i] not in oldlinks:
             response = get(links[i])
-            extractor = Goose()
+            
             article = extractor.extract(raw_html=response.content)
             texts = article.cleaned_text
             news_story = texts.encode('utf-8')
