@@ -22,16 +22,18 @@ def initial_check():
     links = []
     text =[]
     title = []
+    date=[]
     #parse the rss feed
     rss = feedparser.parse(url_link)
    
    #extract links, texts , titles in rss feed
     for post in rss.entries:
         links.append(post.link)
-        
+        date.append(post.published)
         title.append(post.title_detail.value)
         
     #oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
+    
     extractor = Goose()
     for i in range(0, len(links)):
         #if links[i] not in oldlinks:
@@ -42,26 +44,22 @@ def initial_check():
             news_story = texts.encode('utf-8')
             #print("tsest")
             
-            extract(links[i], news_story, title[i])       
+            extract(links[i], news_story, title[i],date[i])       
 
 #Apply tokenization and tagging
-def extract(link, news_story, title):
+def extract(link, news_story, title,date):
     if isinstance(news_story, str):
         news = Tokenize(str(news_story, 'utf-8'))
     else:
         news = Tokenize(news_story.decode('utf-8'))
 
     
-    #month, year, date = re.findall(r'\d+\S\d+\S\d+', news)
     splited_sentences = news.sentences
     tokenized_words = news.words
     tagger = Tagger(tokenized_words)
     pos_tagged_sentences = tagger.getTaggedSentences()
     #data_extractor = DataExtractor(pos_tagged_sentences, news_story)
-
-
-
-
+    
 
     #change this later
     # record = rssdata(header=title,
@@ -73,10 +71,8 @@ def extract(link, news_story, title):
     #                  death_no=data_extractor.death_number(),
     #                  location=data_extractor.location(),
     #                  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
-    #                  vehicle_type=vehicle_type,
-    #                  
-    #                  day=data_extractor.day(news_story),
     #                  date=date,
-    #                  month=month,
-    #                  year=year,
     #                  )
+    # record.save()
+    # return record.id
+    
