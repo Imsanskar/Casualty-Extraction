@@ -6,6 +6,7 @@ from modules.tokenizer import Tokenize
 from modules.tagger import Tagger
 import nltk
 import feedparser
+from .models import *
 from goose3 import Goose
 import urllib
 import requests
@@ -32,17 +33,17 @@ def initial_check():
         date.append(post.published)
         title.append(post.title_detail.value)
         
-    #oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
+    oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
     
     extractor = Goose()
     for i in range(0, len(links)):
-        #if links[i] not in oldlinks:
+        if links[i] not in oldlinks:
             response = get(links[i])
             
             article = extractor.extract(raw_html=response.content)
             texts = article.cleaned_text
             news_story = texts.encode('utf-8')
-            #print("tsest")
+            
             
             extract(links[i], news_story, title[i],date[i])       
 
@@ -58,21 +59,21 @@ def extract(link, news_story, title,date):
     tokenized_words = news.words
     tagger = Tagger(tokenized_words)
     pos_tagged_sentences = tagger.getTaggedSentences()
-    #data_extractor = DataExtractor(pos_tagged_sentences, news_story)
+    data_extractor = DataExtractor(pos_tagged_sentences, news_story)
     
 
     #change this later
-    # record = rssdata(header=title,
-    #                  source="Kathmandu Post",
-    #                  body=news_story.replace("\n", ""),
-    #                  death=data_extractor.deaths(nltk.sent_tokenize(news_story)),
-    #                  link=link,
-    #                  injury_no=data_extractor.injury_number(),
-    #                  death_no=data_extractor.death_number(),
-    #                  location=data_extractor.location(),
-    #                  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
-    #                  date=date,
-    #                  )
-    # record.save()
-    # return record.id
+    news_data = rssdata(header=title,
+                     source="Kathmandu Post",
+                     body=news_story.replace("\n", ""),
+                     death=data_extractor.deaths(nltk.sent_tokenize(news_story)),
+                     link=link,
+                     injury_no=data_extractor.injury_number(),
+                     death_no=data_extractor.death_number(),
+                     location=data_extractor.location(),
+                     injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
+                     date=date,
+                     )
+    news_data.save()
+    return news_data.id
     
