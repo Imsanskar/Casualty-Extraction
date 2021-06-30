@@ -1,8 +1,10 @@
+from DeathExtraction.newsextraction.modules import newstotext
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from forms import NameForm
-from .models import *
+from modules import *
+from models import *
 from methods import *
 from django.db.models import Q #object used to encapsulate a collection of keyword arguments specified as in “Field lookups”.
 
@@ -11,28 +13,29 @@ def index(request):
     news_list = rssdata.objects.all().order_by("-date")
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(news_list, 5)
+    paginator = Paginator(news_list, 5) # a page with maximum 5 items
     try:
-        news = paginator.page(page)
+        news = paginator.page(page)# which page to go to
     except PageNotAnInteger:
-        news = paginator.page(1)
+        news = paginator.page(1)# 1st page to go to
+
     except EmptyPage:
-        news = paginator.page(paginator.num_pages)
+        news = paginator.page(paginator.num_pages)# which page to go to
     return render(request, 'index.html', {'news': news})
 
 
 def extraction(request):
     if request.method == 'POST':
-        form = NameForm(request.POST)
+        form = NameForm(request.POST)# get the link from user
 
         if form.is_valid():
             data = form.cleaned_data
             extracted_data = data['news_link']
-            link, news , title = manual_extract(extracted_data)
+            link, news , title = newstotext.story_extract(extracted_data)#extract news info from link
 
             #
             # If you want to save the input news
-            oldlinks = rssdata.objects.values_list('link', flat=True)
+            oldlinks = rssdata.objects.values_list('link', flat=True) #returns a QuerySet containing single values instead of tuples
 
             if link not in oldlinks:
                 id = extract(link, news, title)
