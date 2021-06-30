@@ -3,6 +3,7 @@ from  datetime import date
 
 #all datafields related to the news
 class rssdata(models.Model):
+    id = models.AutoField(primary_key=True)
     header = models.CharField(blank=True, max_length=200)
     body = models.TextField(blank=False, null=False)
     source = models.CharField(blank=True, max_length=200, null=True)
@@ -14,10 +15,6 @@ class rssdata(models.Model):
     
     date = models.CharField(default=date.today, blank=True, null=True,max_length=100)
     link = models.CharField(blank=True, max_length=200, null=True)
-   
-    month = models.CharField(blank=True, max_length=200, null=True)
-    year = models.CharField(blank=True, max_length=200, null=True)
-    day = models.CharField(blank=True, max_length=200, null=True)
 
 
     # Timestamps for news object created
