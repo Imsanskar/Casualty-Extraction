@@ -15,7 +15,10 @@ class rssdata(models.Model):
     
     date = models.CharField(default=date.today, blank=True, null=True,max_length=100)
     link = models.CharField(blank=True, max_length=200, null=True)
-
+   
+    month = models.CharField(blank=True, max_length=200, null=True)
+    year = models.CharField(blank=True, max_length=200, null=True)
+    day = models.CharField(blank=True, max_length=200, null=True)
 
     # Timestamps for news object created
     created_at = models.DateTimeField(auto_now_add=True)
@@ -26,12 +29,13 @@ class rssdata(models.Model):
         ordering = ('-date', 'location') #sorting type in list
 
 
-#override default save method 
+    #override default save method 
     def save(self, *args, **kwargs):
         super(rssdata, self).save(*args, **kwargs)
 
 
-#Just to identify the object by its header
+    #Just to identify the object by its header
     def __str__(self):
         return self.header
 
+  

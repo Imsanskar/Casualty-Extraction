@@ -1,5 +1,6 @@
 import nltk
 
+
 class Tagger:
 	"""
 		Class for POS tagging of the sentences
@@ -10,6 +11,6 @@ class Tagger:
 
 	def getTaggedSentences(self):
 		"""
-			Returns the pos_tagged sentences, pos tagging is don using nltk
+			Returns the pos_tagged sentences, pos tagging is done using nltk
 		"""
 		return self.tags
