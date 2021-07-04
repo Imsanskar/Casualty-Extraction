@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # from forms import NameForm
 from .models import *
-from methods import *
+from .methods import *
 from django.db.models import Q #object used to encapsulate a collection of keyword arguments specified as in “Field lookups”.
 
 def index(request):

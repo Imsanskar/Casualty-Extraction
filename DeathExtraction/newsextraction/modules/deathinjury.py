@@ -3,12 +3,18 @@
 	Compare with the death and injury verb to select the
 	perfect predicate.
 """
-
+import torch
 from nltk.stem import WordNetLemmatizer
-from transformers.file_utils import TOKENIZERS_IMPORT_ERROR
 from wordNum import *
-from transformers import BigBirdForQuestionAnswering
-import tokenizer
+from transformers import pipeline
+
+
+question_answerer = pipeline('question-answering')
+  
+# tokenizer = AutoTokenizer.from_pretrained("google/bigbird-base-trivia-itc")
+# model = AutoModelForQuestionAnswering.from_pretrained("google/bigbird-base-trivia-itc")
+
+
 
 def death_no(sentlist):
 	# instance for lemmatizer
@@ -19,13 +25,19 @@ def death_no(sentlist):
 	injuryverb = ['injure', 'sustain', 'critical', 'hurt', 'wound', 'harm', 'trauma']
 	verbs = []
 	death = "None"
-	model = BigBirdForQuestionAnswering.from_pretrained("google/bigbird-base-trivia-itc")
 	question = "died"
-	context = sentlist[0]
-	encoded_input = tokenizer(question, context, return_tensors='pt')
-	death = model(**encoded_input)
+	context = sentlist
+	# encoded_input = tokenizer(question, context, return_tensors='pt')
+	# death = model(**encoded_input)
 
-	return convertNum(death)
+	death = question_answerer(
+		{
+			'question': 'How many people were injured?',
+		    'context': context
+		}
+	)
+
+	return death['answer']
 
 
 def convertNum(toconvert:str) -> int:
