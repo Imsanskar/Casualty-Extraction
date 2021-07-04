@@ -1,8 +1,8 @@
-from models import *
+from .models import *
 import re
 
-from modules.tagger import Tagger
-from modules.tokenizer import Tokenize
+from .modules.tagger import Tagger
+from .modules.tokenizer import Tokenize
 import nltk
 import feedparser
 from goose3 import Goose
@@ -10,7 +10,7 @@ from requests import *
 from bs4 import BeautifulSoup
 import urllib
 import requests
-from modules.extractor import DataExtractor
+from .modules.extractor import DataExtractor
 
 """
 	Extracts the info from the news story extracted using scrapper
@@ -35,5 +35,3 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 	# sentences = newsStory.split()
 	return extractedData
-
-extractInfo("7 people died")

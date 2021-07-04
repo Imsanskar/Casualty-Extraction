@@ -1,6 +1,6 @@
 #TODO: create a class called DataExtractor to extract key information from the given news
-from tagger import Tagger
-from tokenizer import Tokenize
+from .tagger import Tagger
+from .tokenizer import Tokenize
 import nltk
 
 class DataExtractor:
