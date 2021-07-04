@@ -5,7 +5,7 @@
 """
 import torch
 from nltk.stem import WordNetLemmatizer
-from wordNum import *
+from .wordNum import *
 from transformers import pipeline
 
 
