@@ -1,8 +1,10 @@
 from newsextraction.modules.utils import initial_check
+from newsextraction.modules.utils import *
+from newsextraction.modules import newstotext
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-# from forms import NameForm
+from .forms import NameForm
 from .models import *
 from .methods import *
 from django.db.models import Q #object used to encapsulate a collection of keyword arguments specified as in “Field lookups”.
@@ -22,6 +24,8 @@ def index(request):
     return render(request, 'index.html', {'news': news})
 
 
+
+
 def extraction(request):
     if request.method == 'POST':
         form = NameForm(request.POST)
@@ -29,7 +33,7 @@ def extraction(request):
         if form.is_valid():
             data = form.cleaned_data
             extracted_data = data['news_link']
-            link, news , title = manual_extract(extracted_data)
+            link, news , title =  newstotext.story_extract(extracted_data)
 
             #
             # If you want to save the input news
