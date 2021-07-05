@@ -2,7 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
-from extractor import DataExtractor
+from .extractor import DataExtractor
 
     
 def story_extract(link:str):
