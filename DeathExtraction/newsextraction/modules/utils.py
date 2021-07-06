@@ -1,5 +1,5 @@
 from newsextraction.modules.wordNum import text2int
-from newsextraction.modules.deathinjury import death_no
+from newsextraction.modules.deathinjury import death_no, injury_no
 from ..models import *
 import re
 
@@ -41,7 +41,7 @@ def extractInfo(newsStory:str) -> DataExtractor:
 #scrape rss feed
 def initial_check():
     #print("here")
-    url_link = "http://fetchrss.com/rss/60d9eed925c82c0cb439b71260d9ee245368013c620947d2.xml" # please create your own rss here
+    url_link = "https://rss.app/feeds/L0VeKbLXpidVMd8A.xml"
     # get all the links of news title
     links = []
     text =[]
@@ -91,7 +91,7 @@ def extract(link, news_story, title,date):
                      body=str(news_story).replace("\n", ""),
                      death=death_no(str(news_story)),
                      link=link,
-                    #  injury_no=data_extractor.injury_number(),
+                     injury=injury_no(str(news_story)),
                     #  death_no= int(text2int(death_no(str(news_story)))),
                     #  location=data_extractor.location(),
                     #  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),

@@ -26,18 +26,48 @@ def death_no(sentlist):
 	verbs = []
 	death = "None"
 	question = "died"
-	context = sentlist
+	if(len(sentlist) > 60):
+		context = sentlist[:60]
+	else:
+		context = sentlist
 	# encoded_input = tokenizer(question, context, return_tensors='pt')
 	# death = model(**encoded_input)
 
 	death = question_answerer(
+		{
+			'question': 'How many people died?',
+		    'context': context
+		}
+	)
+
+	return death['answer']
+
+
+def injury_no(sentlist):
+	# instance for lemmatizer
+	lemmatizer = WordNetLemmatizer()
+
+	# comparision verbs
+	deathverb = ['die', 'kill', 'crush', 'pass']
+	injuryverb = ['injure', 'sustain', 'critical', 'hurt', 'wound', 'harm', 'trauma']
+	verbs = []
+	death = "None"
+	question = "died"
+	if(len(sentlist) > 160):
+		context = sentlist[:160]
+	else:
+		context = sentlist
+	# encoded_input = tokenizer(question, context, return_tensors='pt')
+	# death = model(**encoded_input)
+
+	injury = question_answerer(
 		{
 			'question': 'How many people were injured?',
 		    'context': context
 		}
 	)
 
-	return death['answer']
+	return injury['answer']
 
 
 def convertNum(toconvert:str) -> int:
