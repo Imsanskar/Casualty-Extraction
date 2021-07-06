@@ -35,3 +35,6 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 	# sentences = newsStory.split()
 	return extractedData
+
+
+	
