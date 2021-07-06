@@ -40,7 +40,7 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 #scrape rss feed
 def initial_check():
-    #print("here")
+    
     url_link = "http://fetchrss.com/rss/60d9eed925c82c0cb439b71260d9ee245368013c620947d2.xml" # please create your own rss here
     # get all the links of news title
     links = []
@@ -93,7 +93,7 @@ def extract(link, news_story, title,date):
                      link=link,
                     #  injury_no=data_extractor.injury_number(),
                     #  death_no= int(text2int(death_no(str(news_story)))),
-                    #  location=data_extractor.location(),
+                     location=data_extractor.getLocation(),
                     #  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
                      date=date,
                      )
