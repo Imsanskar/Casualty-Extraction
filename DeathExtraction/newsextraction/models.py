@@ -3,6 +3,7 @@ from  datetime import date
 
 #all datafields related to the news
 class rssdata(models.Model):
+    id = models.AutoField(primary_key=True)
     header = models.CharField(blank=True, max_length=200)
     body = models.TextField(blank=False, null=False)
     source = models.CharField(blank=True, max_length=200, null=True)
