@@ -2,6 +2,7 @@
 from .tagger import Tagger
 from .tokenizer import Tokenize
 import nltk
+import re
 
 class DataExtractor:
 	def __init__(self, posTaggedSentences, newsStory: str):
@@ -19,27 +20,12 @@ class DataExtractor:
 		"""
 		raise NotImplementedError
 	
-	def getDate(self, sentences):
-		""" Gets the number of deaths from the news story.
-			Inputs include the POS tagged words from the news story.
-			Output includ the number of deaths mentioned in the news.
+	def getDay(self, complete_news):
+		""" Gets the day of mishap.
 		"""
-		death_words = ["died", "death", "killed", "life"]
-		# death_regex = "Deaths: {<NNP>?<CD><NNS|NNP>?<VBD|VBN>?<VBD|VBN>}"
-		death_regex = "Deaths: {<CD>}"
-		has_deaths = [sent for sent in sentences if ("died" or "death") in nltk.word_tokenize(sent)]
-	
-		death_parser = nltk.RegexpParser(death_regex)
-
-		for i in self.posTaggedSentences:
-			deaths = death_parser.parse(i)
-			for i in deaths.subtrees(filter=lambda x: x.label() == 'Deaths'):
-				# print(i.leaves())
-				pass
-	
-	def getDeathNumber(self):
-		raise NotImplementedError
-	
-	def getInjuryNumber(self):
-		raise NotImplementedError
+		day_regex = re.compile('\w+day')
+		print(complete_news)
+		day = day_regex.findall(complete_news)[0]
+		# print("The day when the accident occured is: \n"+day)
+		return day
 	
