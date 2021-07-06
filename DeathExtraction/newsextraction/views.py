@@ -50,9 +50,7 @@ def extraction(request):
                                                            'article': rssdata.objects.get(link=link)})
 
 
-        # #
-
-            #
+        
 
     else:
         form = NameForm()
