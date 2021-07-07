@@ -14,19 +14,19 @@ class DataExtractor:
 		self.posTaggedSentences = posTaggedSentences
 
 		
-	def getLocation(self) -> str:
+	def getLocation(self) :
 		"""
 			Returns the location where the accident had happened
 		"""
-		individual_sentences = self.posTaggedSentences
+		individual_sentences = nltk.sent_tokenize(self.news.decode('utf-8').replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n",""))
 
 		locations = []
 
 		for sent in individual_sentences:
 			words = nltk.word_tokenize(sent)
-			if ("died" or "death" or "injured" or "injury" or "injuries" or "killed" or "casualty" or "accident" or "") in words:
+			if ("died" or "death" or "injured" or "injury" or "injuries" or "killed" or "casualty" or "accident" or "crash" or "crashed" or "collided" or "hit" or "lost" ) in words:
 				#grouping similar kinds of words (name_entities)
-				chunked_sentence = nltk.ne_chunk(individual_sentences)
+				chunked_sentence = nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sent)))
 				#label:GPE holds data for location in chunked_sentences
 				for i in chunked_sentence.subtrees(filter=lambda x: x.label() == 'GPE'):
 					print(i)
