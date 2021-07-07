@@ -75,7 +75,7 @@ def extract(link, news_story, title,date):
     if isinstance(news_story, str):
         news = Tokenize(str(news_story, 'utf-8'))
     else:
-        news = Tokenize(news_story.decode('utf-8'))
+        news = Tokenize(news_story.decode('utf-8').replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n",""))
 
     
     splited_sentences = news.sentences
@@ -88,7 +88,7 @@ def extract(link, news_story, title,date):
     #change this later
     news_data = rssdata(header=title,
                      source="Kathmandu Post",
-                     body=str(news_story).replace("\n", ""),
+                     body=str(news_story).replace("\n", "").replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n",""),
                      death=death_no(str(news_story)),
                      link=link,
                     #  injury_no=data_extractor.injury_number(),
@@ -97,6 +97,8 @@ def extract(link, news_story, title,date):
                     #  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
                      date=date,
                      )
+    
+    
     news_data.save()
     return news_data.id
     
