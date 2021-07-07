@@ -5,11 +5,12 @@ import nltk
 from newsextraction.modules.locationTree import LocationInformation
 
 class DataExtractor:
-	def __init__(self, posTaggedSentences, newsStory: str):
+	def __init__(self, posTaggedSentences, newsStory: str,title):
 		"""
 			Constructor for the Data extractor class
 			Initializes the object
 		"""
+		self.title = title
 		self.news = newsStory
 		self.posTaggedSentences = posTaggedSentences
 
@@ -17,12 +18,14 @@ class DataExtractor:
 	def getLocation(self) :
 		"""
 			Returns the location where the accident had happened
+			At first we parse title to search for location , if location not found in title then we search in body
 		"""
-		individual_sentences = nltk.sent_tokenize(self.news.decode('utf-8').replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n",""))
 
-		locations = []
+		#search in title
+		title_sentences = nltk.sent_tokenize(str(self.title).encode('ascii', errors='ignore').decode("utf-8"))
+		locations =[]
 
-		for sent in individual_sentences:
+		for sent in title_sentences:
 			words = nltk.word_tokenize(sent)
 			if ("died" or "death" or "injured" or "injury" or "injuries" or "killed" or "casualty" or "accident" or "crash" or "crashed" or "collided" or "hit" or "lost" ) in words:
 				#grouping similar kinds of words (name_entities)
@@ -33,9 +36,32 @@ class DataExtractor:
 					for i in i.leaves():
 						locations.append(i[0])
 
-		print("after extracting all locations : " + str(locations))
+		if len(locations) != 0:
+			print("after extracting all locations : " + str(locations))
+			
+		else:
+
+
+			individual_sentences = nltk.sent_tokenize(str(self.news).encode('ascii', errors='ignore').decode("utf-8"))
+
+
+			for sent in individual_sentences:
+				words = nltk.word_tokenize(sent)
+				if ("died" or "death" or "injured" or "injury" or "injuries" or "killed" or "casualty" or "accident" or "crash" or "crashed" or "collided" or "hit" or "lost" ) in words:
+					#grouping similar kinds of words (name_entities)
+					chunked_sentence = nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sent)))
+					#label:GPE holds data for location in chunked_sentences
+					for i in chunked_sentence.subtrees(filter=lambda x: x.label() == 'GPE'):
+						print(i)
+						for i in i.leaves():
+							locations.append(i[0])
+			
 
 		return_value = locations
+
+			
+
+		
 		try:
 				if (locations[0] == "New") or (locations[0] == "Old"):
 					return_value = []
