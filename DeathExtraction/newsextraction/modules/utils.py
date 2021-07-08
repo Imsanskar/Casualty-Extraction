@@ -89,12 +89,10 @@ def extract(link, news_story, title,date):
 	news_data = rssdata(header=title,
 					 source="Kathmandu Post",
 					 body=str(news_story).encode('ascii', errors='ignore').decode("utf-8"),
-					 death=death_no(str(news_story)),
+					 death=death_no(str(news_story), str(title)),
+					 injury=injury_no(str(news_story), str(title)),
 					 link=link,
-					#  injury_no=data_extractor.injury_number(),
-					#  death_no= int(text2int(death_no(str(news_story)))),
 					 location=data_extractor.getLocation(),
-					#  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
 					 date=date,
 					 )
 	
