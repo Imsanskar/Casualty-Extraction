@@ -40,8 +40,8 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 #scrape rss feed
 def initial_check():
-	#print("here")
-	url_link = "https://rss.app/feeds/L0VeKbLXpidVMd8A.xml"
+	
+	url_link = "https://rss.app/feeds/L0VeKbLXpidVMd8A.xml" # please create your own rss here
 	# get all the links of news title
 	links = []
 	text =[]
@@ -75,28 +75,30 @@ def extract(link, news_story, title,date):
 	if isinstance(news_story, str):
 		news = Tokenize(str(news_story, 'utf-8'))
 	else:
-		news = Tokenize(news_story.decode('utf-8'))
+		news = Tokenize(news_story.decode('utf-8').replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n","").replace("xe2\x80\x99s",""))
 
 	
 	splited_sentences = news.sentences
 	tokenized_words = news.words
 	tagger = Tagger(tokenized_words)
 	pos_tagged_sentences = tagger.getTaggedSentences()
-	data_extractor = DataExtractor(pos_tagged_sentences, news_story)
+	data_extractor = DataExtractor(pos_tagged_sentences, news_story,title)
 	
-	
+
 	#change this later
 	news_data = rssdata(header=title,
 					 source="Kathmandu Post",
-					 body=str(news_story).replace("\n", ""),
-					 death=death_no(str(news_story), str(title)),
+					 body=str(news_story).encode('ascii', errors='ignore').decode("utf-8"),
+					 death=death_no(str(news_story)),
 					 link=link,
-					 injury=injury_no(str(news_story), str(title)),
+					#  injury_no=data_extractor.injury_number(),
 					#  death_no= int(text2int(death_no(str(news_story)))),
-					#  location=data_extractor.location(),
+					 location=data_extractor.getLocation(),
 					#  injury=data_extractor.injury(nltk.sent_tokenize(news_story)),
 					 date=date,
 					 )
+	
+	
 	news_data.save()
 	return news_data.id
 	

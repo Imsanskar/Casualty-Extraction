@@ -85,6 +85,7 @@ kanchanpur = Node("kanchanpur", parent=nepal)
 dadeldhura = Node("dadeldhura", parent=nepal)
 baitadi = Node("baitadi", parent=nepal)
 darchula = Node("darchula", parent=nepal)
+daunne = Node("daunne",parent=nepal)
 
 chabahil = Node("chabahil", parent=kathmandu)
 sukedhara = Node("sukedhara", parent=kathmandu)
