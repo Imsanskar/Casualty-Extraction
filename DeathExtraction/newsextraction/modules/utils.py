@@ -89,6 +89,7 @@ def extract(link, news_story, title, date):
 	#change this later
 	news_data = rssdata(header=title,
 					 source="Kathmandu Post",
+
 					 body=str(news_story),
 					 death=death_no(news_story, str(title)),
 					 injury=injury_no(str(news_story), str(title)),
