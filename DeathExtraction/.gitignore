@@ -2,4 +2,6 @@ __pycache__/
 env/
 .vscode/
 test.py
+*.sqlite3
+
 db.sqlite3
