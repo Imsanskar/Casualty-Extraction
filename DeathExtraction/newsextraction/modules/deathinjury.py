@@ -27,16 +27,18 @@ def death_no(news, header):
 	score = 0
 	answer = ""
 	for verb in deathverb:
-		# if verb in header:
-		# 	death = question_answerer(
-		# 		{
-		# 			'question': 'How many people died?',
-		# 			'context': header
-		# 		}
-		# 	)
-		# 	if death['score'] > score:
-		# 		score = death['score']
-		# 		answer = death['answer']
+		if verb in header:
+			death = question_answerer(
+				{
+					'question': 'How many people died?',
+					'context': header
+				}
+			)
+			if death['score'] > score:
+				score = death['score']
+				answer = death['answer']
+
+
 		# only calculate the score if the verb is in the context
 		if verb not in context:
 			continue

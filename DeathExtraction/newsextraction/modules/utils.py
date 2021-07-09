@@ -40,8 +40,8 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 #scrape rss feed
 def initial_check():
-	
-	url_link = "https://rss.app/feeds/L0VeKbLXpidVMd8A.xml" # please create your own rss here
+	url_link = "https://rss.app/feeds/CEkAmlzktGGZUdjn.xml"
+	# url_link = "https://rss.app/feeds/L0VeKbLXpidVMd8A.xml" # please create your own rss here
 	# get all the links of news title
 	links = []
 	text =[]
@@ -65,19 +65,20 @@ def initial_check():
 			
 			article = extractor.extract(raw_html=response.content)
 			texts = article.cleaned_text
+			texts = texts.replace("\xe2\x80\x9c", " ").replace("\xe2\x80\x9d", " ").replace("\n\n"," ").replace("xe2\x80\x99s"," ")
 			news_story = texts.encode('utf-8')
 			
 			
-			extract(links[i], news_story, title[i],date[i])       
+			extract(links[i], texts, title[i],date[i])       
 
 #Apply tokenization and tagging
-def extract(link, news_story, title,date):
-	if isinstance(news_story, str):
-		news = Tokenize(str(news_story, 'utf-8'))
-	else:
-		news = Tokenize(news_story.decode('utf-8').replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n","").replace("xe2\x80\x99s",""))
+def extract(link, news_story, title, date):
+	# if isinstance(news_story, str):
+	# 	news = Tokenize(str(news_story, 'utf-8'))
+	# else:
+	# 	news = Tokenize(news_story.decode('utf-8').replace("\xe2\x80\x9c", "").replace("\xe2\x80\x9d", "").replace("\n\n","").replace("xe2\x80\x99s",""))
 
-	
+	news = Tokenize(news_story)
 	splited_sentences = news.sentences
 	tokenized_words = news.words
 	tagger = Tagger(tokenized_words)
@@ -88,8 +89,8 @@ def extract(link, news_story, title,date):
 	#change this later
 	news_data = rssdata(header=title,
 					 source="Kathmandu Post",
-					 body=str(news_story).encode('ascii', errors='ignore').decode("utf-8"),
-					 death=death_no(str(news_story), str(title)),
+					 body=str(news_story),
+					 death=death_no(news_story, str(title)),
 					 injury=injury_no(str(news_story), str(title)),
 					 link=link,
 					 location=data_extractor.getLocation(),
