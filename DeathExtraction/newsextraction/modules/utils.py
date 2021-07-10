@@ -47,14 +47,17 @@ def initial_check():
 	text =[]
 	title = []
 	date=[]
+	source = []
 	#parse the rss feed
 	rss = feedparser.parse(url_link)
    
    #extract links, texts , titles in rss feed
 	for post in rss.entries:
-		links.append(post.link)
-		date.append(post.published)
-		title.append(post.title_detail.value)
+		if post.has_key('published'):
+			links.append(post.link)
+			date.append(post.published)
+			title.append(post.title_detail.value)
+			source.append(post.author)
 		
 	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
 	
@@ -69,10 +72,10 @@ def initial_check():
 			news_story = texts.encode('utf-8')
 			
 			
-			extract(links[i], texts, title[i],date[i])       
+			extract(links[i], texts, title[i],date[i], source[i])       
 
 #Apply tokenization and tagging
-def extract(link, news_story, title, date):
+def extract(link, news_story, title, date, source):
 	# if isinstance(news_story, str):
 	# 	news = Tokenize(str(news_story, 'utf-8'))
 	# else:
@@ -88,7 +91,7 @@ def extract(link, news_story, title, date):
 
 	#change this later
 	news_data = rssdata(header=title,
-					 source="Kathmandu Post",
+					 source=source,
 
 					 body=str(news_story),
 					 death=death_no(news_story, str(title)),
