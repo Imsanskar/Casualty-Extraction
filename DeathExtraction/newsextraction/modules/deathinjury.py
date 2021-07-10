@@ -70,6 +70,12 @@ def injury_no(news, header):
 
 	score = 0
 	answer = ""
+	injury = question_answerer(
+		{
+			'question': 'How many people ' + died + '?',
+			'context': context
+		}
+	)
 	for verb in injuryverb:
 		# if verb in header:
 		# 	injury = question_answerer(
