@@ -4,6 +4,8 @@ from .tokenizer import Tokenize
 import nltk
 import re
 from newsextraction.modules.locationTree import LocationInformation
+import spacy
+nlp = spacy.load('en_core_web_lg')
 
 class DataExtractor:
 	def __init__(self, posTaggedSentences, newsStory: str,title):
@@ -17,45 +19,22 @@ class DataExtractor:
 
 	
 	def get_title_location_chunks(self):
-		chunked = nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(str(self.title).encode('ascii', errors='ignore').decode("utf-8"))))
-		prev = None
-		continuous_chunk = []
-		current_chunk = []
+		gpe=[]
+		doc = nlp(self.title)
+		for ent in doc.ents:
+   			if (ent.label_ == 'GPE'):
+				   gpe.append(ent.text)
 
-		for subtree in chunked:
-			if type(subtree) == nltk.Tree and subtree.label() == 'GPE':
-				current_chunk.append(" ".join([token for token, pos in subtree.leaves()]))
-			if current_chunk:
-				named_entity = " ".join(current_chunk)
-				if named_entity not in continuous_chunk:
-					continuous_chunk.append(named_entity)
-					current_chunk = []
-			else:
-				continue
-		print(continuous_chunk)
-
-		return continuous_chunk
+		return gpe
 
 	def get_body_location_chunks(self):
-		chunked = nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(str(self.title).encode('ascii', errors='ignore').decode("utf-8"))))
-		prev = None
-		continuous_chunk = []
-		current_chunk = []
+		gpe=[]
+		doc = nlp(self.news)
+		for ent in doc.ents:
+			if (ent.label_ == 'GPE'):
+				gpe.append(ent.text)
 
-		for subtree in chunked:
-			if type(subtree) == nltk.Tree and subtree.label() == 'GPE':
-				current_chunk.append(" ".join([token for token, pos in subtree.leaves()]))
-			if current_chunk:
-				named_entity = " ".join(current_chunk)
-				if named_entity not in continuous_chunk:
-					continuous_chunk.append(named_entity)
-					current_chunk = []
-			else:
-				continue
-		print(continuous_chunk)
-
-		return continuous_chunk
-
+		return gpe
 		
 	def getLocation(self) :
 		"""
@@ -100,7 +79,7 @@ class DataExtractor:
 			
 		locations =[]
 		locations=self.get_title_location_chunks()
-		if len(locations) == 0:
+		if len(locations) != 0:
 			print(len(locations))
 			print("after extracting all locations from title : " + str(locations))
 		else:
@@ -112,12 +91,7 @@ class DataExtractor:
 			
 
 		
-		try:
-				if (locations[0] == "New") or (locations[0] == "Old"):
-					return_value = []
-					return_value.append(locations[0] + " " + locations[1])
-		except:
-				pass
+		
 
 		
 
@@ -144,11 +118,12 @@ class DataExtractor:
 						if max_location in ktm_location:
 							return_location = max_location
 						elif max_location in ltp_location:
-							return_location = max_location
+						 	return_location = max_location
 						elif max_location in bkt_location:
-							return_location = max_location
+						 	return_location = max_location
 						elif max_location in outside_location:
-							return_location = max_location
+						 	return_location = max_location
+			print("return_location:", return_location )
 
 		return return_location
 	
