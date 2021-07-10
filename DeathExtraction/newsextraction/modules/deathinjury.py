@@ -72,7 +72,7 @@ def injury_no(news, header):
 	answer = ""
 	injury = question_answerer(
 		{
-			'question': 'How many people ' + died + '?',
+			'question': 'How many people died?',
 			'context': context
 		}
 	)
