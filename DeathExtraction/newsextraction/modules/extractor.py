@@ -20,7 +20,7 @@ class DataExtractor:
 	
 	def get_title_location_chunks(self):
 		gpe=[]
-		doc = nlp(self.title)
+		doc = nlp(str(self.title))
 		for ent in doc.ents:
    			if (ent.label_ == 'GPE'):
 				   gpe.append(ent.text)
@@ -29,7 +29,7 @@ class DataExtractor:
 
 	def get_body_location_chunks(self):
 		gpe=[]
-		doc = nlp(self.news)
+		doc = nlp(str(self.news))
 		for ent in doc.ents:
 			if (ent.label_ == 'GPE'):
 				gpe.append(ent.text)
