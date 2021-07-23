@@ -26,6 +26,14 @@ def death_no(news, header):
 	
 	score = 0
 	answer = ""
+	death = question_answerer(
+		{
+			'question': 'How many people died?',
+			'context': context
+		}
+	)
+	score = death['score']
+	answer = death['answer']
 	for verb in deathverb:
 		if verb in header:
 			death = question_answerer(
@@ -70,6 +78,14 @@ def injury_no(news, header):
 
 	score = 0
 	answer = ""
+	injury = question_answerer(
+		{
+			'question': 'How many people were injured?',
+			'context': context
+		}
+	)
+	score = injury['score']
+	answer = injury['answer']
 	for verb in injuryverb:
 		# if verb in header:
 		# 	injury = question_answerer(
