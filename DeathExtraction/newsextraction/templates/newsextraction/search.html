@@ -1,0 +1,104 @@
+
+{% extends "base.html" %}
+
+{% block body %}  
+ 
+	<div class="mainbody">
+		<div class="bodyContainer" id="bodyContainer">
+    <div class="container">
+   <form method="post" action="" style="position : relative;
+   width  : 70%;
+   height : 30%;
+   margin : 0 auto;
+   padding: 10px;
+   box-sizing: border-box;">
+    {% csrf_token %}
+     {{ form.as_ul }}
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+  <br>
+  </div>
+			<div class="tophead">
+				<h2>Recent activities</h2>
+			</div>
+      <h1 style="text-align: center;">Search Results for "{{ search}}"</h1>
+      {% if posts %}
+			{% for news in posts %}
+				<div class="card">
+					<div class="date">
+						
+						{{ news.date }}
+					</div>
+					<div class="details">
+						<div>
+							<h3>{{ news.header }}</h3>
+
+						</div>
+						<div class="source">
+							<h5>Source: {{ news.source }}</h5>
+						</div>
+
+						<div class="btn">
+							<a href="#">
+								<button 
+								onclick = "selectedItem('{{ news.death }}', '{{ news.injury }}')"
+								>
+									View more
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+     
+
+      {% else %}
+      <div style="color: rgba(19, 125, 196, 0.863);text-align: center; text-decoration: rgb(12, 44, 223); text-rendering: geometricPrecision;text-shadow: 1px 1px 2px rgb(240, 11, 11), 0 0 25px rgb(85, 83, 82), 0 0 5px rgb(204, 152, 55);" >
+       </br>
+       <br>
+        
+    <p style="font-size: 40px;">Sorry,  Nothing Found</p>
+      </div>
+{% endif %}
+		</div>
+
+	</div>
+{% endblock %}
+
+{% block extract %}
+	<!-- ------------------extracted--------------------- -->
+	<div class="extract">
+
+		<div class="extractContainer">
+			<div class="line"> </div>
+			<div class="infoContainer">
+				<h2>Extracted items</h2>
+				<div>Death Count: <span>2</span></div>
+				<div>Injured Count: <span>2</span></div>
+				<div>Injury: <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis qui cumque
+						architecto praesentium tenetur quam. Nihil nesciunt eaque dignissimos eos veniam non,
+						molestiae distinctio odit vero commodi porro qui, delectus ad at fugiat impedit.2</span>
+				</div>
+				<div>Vehicle: <span>2</span></div>
+				<div>Vehicle Number: <span>2</span></div>
+				<div>Location: <span>2</span></div>
+				<div>Date: <span>2</span></div>
+				<div>Full Detail:
+					<p>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi ipsum error provident optio
+						repellat debitis, reiciendis atque perspiciatis! Dignissimos fuga tempore voluptates odit,
+						reprehenderit architecto exercitationem est libero, atque hic autem, quia modi?
+					</p>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}
+
+
+
+
