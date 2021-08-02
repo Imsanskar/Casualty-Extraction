@@ -10,7 +10,7 @@ class NameForm(forms.Form):
 
 class SearchForm(forms.Form):
     
-    all = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
+    all = forms.BooleanField(widget=forms.CheckboxInput(),initial=True,required=False)
     header = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
     body = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
     source = forms.BooleanField(widget=forms.CheckboxInput(),required=False)

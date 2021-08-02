@@ -57,9 +57,15 @@ def searchView(request):
         search_text = request.POST.get('sname')
 
         
+        
 
         if search_main != None:
             search=search_main
+
+            SearchForm.all=True
+            form= SearchForm
+            all='on'
+            
         else:
             search = search_text
 
@@ -67,7 +73,6 @@ def searchView(request):
             int(search)
             flag = 1
 
-                    
         except ValueError:
             flag = 0
 
@@ -146,6 +151,9 @@ def searchView(request):
         return render(request, 'newsextraction/search.html', context)
     
     else:
+        
+        
+        print("bbb")
         context ={}
         context['form']= SearchForm()
         return render(request, 'newsextraction/search.html', context)
