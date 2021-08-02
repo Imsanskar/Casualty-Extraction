@@ -41,6 +41,7 @@ def searchView(request):
 
 
     if request.method == 'POST':
+        form = SearchForm(data=request.POST)
         search_main =request.POST.get('search_main')
         all = request.POST.get('all')
         header = request.POST.get('header')
@@ -53,7 +54,7 @@ def searchView(request):
         year = request.POST.get('year')
         month = request.POST.get('month')
         day = request.POST.get('day')
-        search_text = request.POST.get('search_text')
+        search_text = request.POST.get('sname')
 
         
 
@@ -114,13 +115,14 @@ def searchView(request):
                 queries = rssdata.objects.filter(Q(injury_no__iexact=int(search)))
                 for query in queries:
                     posts.append(query)
+                    
 
             if date=='on':
                 queries = rssdata.objects.filter(Q(date__iexact=search))
                 for query in queries:
                     posts.append(query)
 
-            if (year=='on' or flag == 1):
+            if (year=='on' and flag == 1):
                 queries = rssdata.objects.filter(Q(year__iexact=int(search)))
                 for query in queries:
                     posts.append(query)
@@ -137,7 +139,7 @@ def searchView(request):
         posts= list(set(posts))
 
         context ={}
-        context['form']= SearchForm()
+        context['form']= form
         context['posts']=posts
         context['search'] =search
 
