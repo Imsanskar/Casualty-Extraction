@@ -9,10 +9,11 @@
 			{% for news in newsList %}
 				<div class="card">
 					<div class="date">
-						<!-- <h3>17</h3>
-						<h4>july</h4>
-						<h4>2020</h4> -->
-						{{ news.date }}
+						<h3>{{ news.day }}</h3>
+						<h4>
+							{{ news.month }}
+						</h4>
+						<h4>{{ news.year }}</h4>
 					</div>
 					<div class="details">
 						<div>
@@ -26,7 +27,7 @@
 						<div class="btn">
 							<a href="#">
 								<button 
-								onclick = "selectedItem('{{ news.death }}', '{{ news.injury }}')"
+								onclick = "selectedItem('{{ news.death }}', '{{ news.injury }}', '{{ news.day }}', '{{ news.month }}', '{{ news.year }}','{{ news.vehicle }}', '{{ vehicle_number }}', '{{ news.location }}','{{ news.link }}')"
 								>
 									View more
 								</button>
@@ -48,23 +49,17 @@
 			<div class="line"> </div>
 			<div class="infoContainer">
 				<h2>Extracted items</h2>
-				<div>Death Count: <span>2</span></div>
-				<div>Injured Count: <span>2</span></div>
+				<div>Death Count: <span id="deathcount"></span></div>
+				<div>Injured Count: <span id="injuredcount"></span></div>
 				<div>Injury: <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis qui cumque
 						architecto praesentium tenetur quam. Nihil nesciunt eaque dignissimos eos veniam non,
 						molestiae distinctio odit vero commodi porro qui, delectus ad at fugiat impedit.2</span>
 				</div>
-				<div>Vehicle: <span>2</span></div>
-				<div>Vehicle Number: <span>2</span></div>
-				<div>Location: <span>2</span></div>
-				<div>Date: <span>2</span></div>
-				<div>Full Detail:
-					<p>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi ipsum error provident optio
-						repellat debitis, reiciendis atque perspiciatis! Dignissimos fuga tempore voluptates odit,
-						reprehenderit architecto exercitationem est libero, atque hic autem, quia modi?
-					</p>
-				</div>
+				<div>Vehicle: <span id="vehicle"></span></div>
+				<div>Vehicle Number: <span id = "vehicle_number"></span></div>
+				<div>Location: <span id="location"></span></div>
+				<div>Date: <span id="date"></span></div>
+				<div>Link: <span id="link"></span></div>
 
 
 			</div>

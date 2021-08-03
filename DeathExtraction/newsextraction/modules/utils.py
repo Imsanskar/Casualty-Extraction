@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 import urllib
 import requests
 from .extractor import DataExtractor
+from dateutil.parser import parse
 
 """
 	Extracts the info from the news story extracted using scrapper
@@ -40,7 +41,7 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 #scrape rss feed
 def initial_check():
-	url_link = "https://www.nepalitimes.com/feed/"
+	url_link = "https://rss.app/feeds/yFs0G2UqM99XcVMK.xml"
 	# create your own rss here
 	# get all the links of news title
 	links = []
@@ -84,6 +85,9 @@ def extract(link, news_story, title, date, source):
 	pos_tagged_sentences = tagger.getTaggedSentences()
 	data_extractor = DataExtractor(pos_tagged_sentences, news_story,title)
 	
+	news_date  = parse(date)
+	month_list = [ "January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December" ];
 
 	#change this later
 	news_data = rssdata(header=title,
@@ -94,6 +98,9 @@ def extract(link, news_story, title, date, source):
 					 link=link,
 					 location=data_extractor.getLocation(),
 					 date=date,
+					 month = month_list[news_date.month - 1],
+					 year = news_date.year,
+					 day = news_date.day
 					 )
 	
 	

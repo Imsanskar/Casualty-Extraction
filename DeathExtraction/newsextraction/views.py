@@ -14,6 +14,9 @@ def index(request):
 	news_list = rssdata.objects.all().order_by("-date")
 	page = request.GET.get('page', 1)
 
+
+
+
 	paginator = Paginator(news_list, 5)
 	try:
 		news = paginator.page(page)
