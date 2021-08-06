@@ -22,10 +22,14 @@
                 </div>
                 
 				{% if isHome %}
-					<div class="searchcontainer">
-						<div><input class="form" type="text" placeholder=" Search" aria-label="Search"></div>
-						<div><a href="#"><i class="fas fa-search"></i></a></div>
-					</div>
+					<div class="searchcontainer" >
+                    <form method="POST" action="/search/">
+                    {% csrf_token %}
+						<div><input class="form"  type="text" placeholder=" Search" aria-label="Search" name="search_main"></div>
+						<div >
+                        <button class="fas fa-search" type="submit"></button></div>
+					</form>
+                    </div>
 				{% endif %}
             </div>
 
