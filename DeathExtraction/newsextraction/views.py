@@ -35,7 +35,13 @@ def index(request):
 
 
 def extraction(request):
-	return render(request, 'newsextraction/extraction.html', {'isHome':False})
+	linkForm = NameForm()
+	if request.method == 'POST':
+		linkForm = NameForm(request.POST)
+		if(linkForm.is_valid()):
+			title, story, link = newstotext.story_extract(linkForm.cleaned_data['news_link'])
+			return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm})
+	return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm})
 
 
 def about_us(request):

@@ -7,8 +7,12 @@
 			<div>
 				<h2 class="linkheading">Enter your link here</h2>
 				<div class="extractionformContainer">
-					<div><input class="form" type="text" placeholder=" Enter here " aria-label="Search"></div>
-					<a href="#"><button class="btn">Submit</button></a>
+					<form method="POST">
+						{% csrf_token %}
+						{{ form.news_link }}
+						<a href="extraction"><button class="btn">Submit</button></a>
+					</form>
+					<!-- <div><input class="form" type="text" placeholder=" Enter here " aria-label="Search"></div> -->
 				</div>
 
 			</div>
