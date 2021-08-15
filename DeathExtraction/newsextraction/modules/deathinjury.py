@@ -6,7 +6,7 @@
 import torch
 from nltk.stem import WordNetLemmatizer
 from .wordNum import *
-from newsextraction import question_answerer
+from DeathExtraction import question_answerer
 
 def death_no(news, header):
 	# instance for lemmatizer

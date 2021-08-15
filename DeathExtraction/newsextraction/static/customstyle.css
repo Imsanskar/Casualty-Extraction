@@ -1,0 +1,44 @@
+
+.extractcontainer{
+    position: relative;
+    top: 30px;
+    border: 1px solid rgb(218, 218, 218);
+    border-radius: 5px;
+}
+    
+  
+#mapcontainer {
+    position: relative;
+   top: 40px;
+    height: 85vh;
+    border-radius: 10px;
+    margin: 0px 10px;
+}
+
+.cardbodycontainer div{
+    font-weight: bold;
+    font-size: 16px;
+    margin: 2px;
+    padding: 5px;
+}
+
+.cardbodycontainer div span{
+    font-weight: lighter;
+    font-size: 14px;
+}
+.cardbodycontainer div p{
+    font-weight: lighter;
+    font-size: 14px;
+}
+  
+
+/* ================pagination================= */
+
+
+.pagination li a{
+    color: #292b2c;
+}
+.pagination li a:hover{
+    color: #fff;
+    background-color: #292b2c;
+}

@@ -1,3 +1,4 @@
+from newsextraction.modules.vehicles_gazetter import VehicleInformation
 from newsextraction.modules.wordNum import text2int
 from newsextraction.modules.deathinjury import death_no, injury_no
 from ..models import *
@@ -76,7 +77,7 @@ def initial_check():
 			extract(links[i], texts, title[i],date[i], source[i])       
 
 #Apply tokenization and tagging
-def extract(link, news_story, title, date, source):
+def extract(link, news_story, title, date, source, save = True):
 
 	news = Tokenize(news_story)
 	splited_sentences = news.sentences
@@ -84,10 +85,15 @@ def extract(link, news_story, title, date, source):
 	tagger = Tagger(tokenized_words)
 	pos_tagged_sentences = tagger.getTaggedSentences()
 	data_extractor = DataExtractor(pos_tagged_sentences, news_story,title)
+	vehicleGazetter = VehicleInformation(news_story)
 	
-	news_date  = parse(date)
+	news_date = ""
+	if(date != ""):
+		news_date  = parse(date)
 	month_list = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
+
+	vehicles, isTwo, isThree, isFour = vehicleGazetter.find_vehicles()
 
 	#change this later
 	news_data = rssdata(header=title,
@@ -98,12 +104,15 @@ def extract(link, news_story, title, date, source):
 					 link=link,
 					 location=data_extractor.getLocation(),
 					 date=date,
-					 month = month_list[news_date.month - 1],
-					 year = news_date.year,
-					 day = news_date.day
+					 month = month_list[news_date.month - 1] if date != "" else "",
+					 year = news_date.year if date != "" else "",
+					 day = news_date.day if date != "" else "",
+					 vehicleNo = len(vehicles),
+					 vehicleCode = data_extractor.vehicle(),
+					 vehicleType = vehicles
 					 )
 	
-	
-	news_data.save()
-	return news_data.id
+	if save:	
+		news_data.save()
+	return news_data
 	

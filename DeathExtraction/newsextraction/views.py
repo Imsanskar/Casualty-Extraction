@@ -3,6 +3,7 @@ from newsextraction.modules.utils import *
 from newsextraction.modules import newstotext
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, response
 
 from .forms import NameForm
 from .models import *
@@ -40,8 +41,14 @@ def extraction(request):
 		linkForm = NameForm(request.POST)
 		if(linkForm.is_valid()):
 			title, story, link = newstotext.story_extract(linkForm.cleaned_data['news_link'])
-			return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm})
-	return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm})
+			print(title, story, link,sep="\n")
+			newsData = extract(link, story, title, "", "", False)	
+			return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':True, 'news':newsData})
+	return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':False})
+
+
+def graph(request):
+	return render(request, 'newsextraction/visualization.html') 
 
 
 def about_us(request):
