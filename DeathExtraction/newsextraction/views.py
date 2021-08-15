@@ -49,19 +49,6 @@ def extraction(request):
 
 def graph(request):
 	return render(request, 'newsextraction/visualization.html') 
-	paginator = Paginator(news_list, 5)
-	try:
-		news = paginator.page(page)
-	except PageNotAnInteger:
-		news = paginator.page(1)
-	except EmptyPage:
-		news = paginator.page(paginator.num_pages)
-	print(list(news_list)[0].date)
-	return render(request, 'newsextraction/index.html', {
-			'newsList': list(news_list),
-			'isHome':True,
-		}
-	)
 
 
 
