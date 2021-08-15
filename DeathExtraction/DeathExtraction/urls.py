@@ -16,9 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-import newsextraction
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('newsextraction.urls'))
+    path('', include('newsextraction.urls')),
 ]

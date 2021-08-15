@@ -1,45 +1,33 @@
 {% extends "base.html" %}
 
-{% block body %} 
-	<!-- --------------------mainbody-------------------- -->
-	<div class="extractionMainbody">
-		<div class="bodycontainer" id="bodyContainer">
-			<div>
-				<h2 class="linkheading">Enter your link here</h2>
-				<div class="extractionformContainer">
-					<div><input class="form" type="text" placeholder=" Enter here " aria-label="Search"></div>
-					<a href="#"><button class="btn">Submit</button></a>
-				</div>
+{% block body %}
+<!-- --------------------mainbody-------------------- -->
+<div class="container my-5">
+	<form method="POST">
+		{% csrf_token %}
+		<div class="mb-3">
+			<label for="newsLinkForm" class="form-label">News Link</label>
+			{{ form.news_link }}
+			<div id="newshelp" class="form-text">Enter your link to extract information.</div>
+		</div>
 
-			</div>
+		<a href="extraction"><button class="btn btn-primary" id="linksubmit">Submit</button></a>
+	</form>
 
-			<div class="infoContainer">
-				<h2>Extracted items</h2>
-				<div>Death Count: <span>2</span></div>
-				<div>Injured Count: <span>2</span></div>
-				<div>Injury: <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis qui cumque
-						architecto praesentium tenetur quam. Nihil nesciunt eaque dignissimos eos veniam non,
-						molestiae distinctio odit vero commodi porro qui, delectus ad at fugiat impedit.2</span>
-				</div>
-				<div>Vehicle: <span>2</span></div>
-				<div>Vehicle Number: <span>2</span></div>
-				<div>Location: <span>2</span></div>
-				<div>Date: <span>2</span></div>
-				<div>Full Detail:
-					<p>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi ipsum error provident optio
-						repellat debitis, reiciendis atque perspiciatis! Dignissimos fuga tempore voluptates odit,
-						reprehenderit architecto exercitationem est libero, atque hic autem, quia modi?
-						Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto debitis facilis quos
-						corporis sapiente consectetur officia minus voluptatibus deleniti, impedit itaque. Qui ullam
-						eum odit veniam mollitia fugit, temporibus sunt nemo? Ipsa nesciunt repellat nam, aliquid
-						fuga accusamus nostrum. Assumenda eligendi soluta error! Vero autem quidem ea voluptatum
-						soluta! Perferendis consequatur consequuntur pariatur modi cumque?
-					</p>
-				</div>
 
-			</div>
-
+	{% if isData %}
+	<div class="extractcontainer col-sm-12" id="extractContainer">
+		<h2 class="card-header text-white bg-dark">Extracted items</h2>
+		<div class="card-body cardbodycontainer">
+			<div>Death Count: <span>{{ news.death }}</span></div>
+			<div>Injured Count: <span>{{ news.injury }}</span></div>
+			<div>Location: <span>{{ news.location }}</span></div>
+			<div>No of vehicles: <span>{{ news.vehicleNo }}</span></div>
+			<div>Vehicle Types: <span>{{ news.vehicleType }}</span></div>
+			<div>Link: <span>{{ news.link }}</span></div>
+		</div>
 
 	</div>
+	{% endif %}
+</div>
 {% endblock %}

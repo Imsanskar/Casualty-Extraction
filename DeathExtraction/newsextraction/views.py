@@ -3,6 +3,7 @@ from newsextraction.modules.utils import *
 from newsextraction.modules import newstotext
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, response
 
 from .forms import NameForm,SearchForm
 from .models import *
@@ -14,6 +15,40 @@ def index(request):
 	news_list = rssdata.objects.all().order_by("-date")
 	page = request.GET.get('page', 1)
 
+
+
+
+	paginator = Paginator(news_list, 5)
+	try:
+		news = paginator.page(page)
+	except PageNotAnInteger:
+		news = paginator.page(1)
+	except EmptyPage:
+		news = paginator.page(paginator.num_pages)
+	print(list(news_list)[0].date)
+	return render(request, 'newsextraction/index.html', {
+			'newsList': list(news_list),
+			'isHome':True,
+		}
+	)
+
+
+
+
+def extraction(request):
+	linkForm = NameForm()
+	if request.method == 'POST':
+		linkForm = NameForm(request.POST)
+		if(linkForm.is_valid()):
+			title, story, link = newstotext.story_extract(linkForm.cleaned_data['news_link'])
+			print(title, story, link,sep="\n")
+			newsData = extract(link, story, title, "", "", False)	
+			return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':True, 'news':newsData})
+	return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':False})
+
+
+def graph(request):
+	return render(request, 'newsextraction/visualization.html') 
 	paginator = Paginator(news_list, 5)
 	try:
 		news = paginator.page(page)
@@ -162,8 +197,6 @@ def searchView(request):
 
 
 
-def extraction(request):
-	return render(request, 'newsextraction/extraction.html', {'isHome':False})
 
 
 def about_us(request):
