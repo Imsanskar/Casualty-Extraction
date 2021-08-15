@@ -42,7 +42,7 @@ def extractInfo(newsStory:str) -> DataExtractor:
 
 #scrape rss feed
 def initial_check():
-	url_link = "https://rss.app/feeds/yFs0G2UqM99XcVMK.xml"
+	url_link = "https://rss.app/feeds/NZxckjuk8A0VhGpG.xml"
 	# create your own rss here
 	# get all the links of news title
 	links = []
