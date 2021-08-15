@@ -6,11 +6,7 @@
 import torch
 from nltk.stem import WordNetLemmatizer
 from .wordNum import *
-from transformers import pipeline
-
-
-question_answerer = pipeline('question-answering')
-
+from DeathExtraction import question_answerer
 
 def death_no(news, header):
 	# instance for lemmatizer
@@ -48,8 +44,6 @@ def death_no(news, header):
 
 
 		# only calculate the score if the verb is in the context
-		if verb not in context:
-			continue
 		death = question_answerer(
 			{
 				'question': 'How many people ' + verb + '?',
