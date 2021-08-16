@@ -13,7 +13,6 @@ from django.db.models import Q #object used to encapsulate a collection of keywo
 def index(request):
 	initial_check()
 	news_list = rssdata.objects.all().order_by("-date")
-
 	return render(request, 'newsextraction/index.html', {
 			'newsList': list(news_list),
 			'isHome':True,
