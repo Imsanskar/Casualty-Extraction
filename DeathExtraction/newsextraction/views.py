@@ -4,7 +4,7 @@ from newsextraction.modules import newstotext
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, response
-
+from newsextraction.modules.locationTree import LocationInformation
 from .forms import NameForm,SearchForm
 from .models import *
 from .methods import *
@@ -13,19 +13,7 @@ from django.db.models import Q #object used to encapsulate a collection of keywo
 def index(request):
 	initial_check()
 	news_list = rssdata.objects.all().order_by("-date")
-	page = request.GET.get('page', 1)
 
-
-
-
-	paginator = Paginator(news_list, 5)
-	try:
-		news = paginator.page(page)
-	except PageNotAnInteger:
-		news = paginator.page(1)
-	except EmptyPage:
-		news = paginator.page(paginator.num_pages)
-	print(list(news_list)[0].date)
 	return render(request, 'newsextraction/index.html', {
 			'newsList': list(news_list),
 			'isHome':True,
@@ -48,20 +36,14 @@ def extraction(request):
 
 
 def graph(request):
-	return render(request, 'newsextraction/visualization.html') 
-	paginator = Paginator(news_list, 5)
-	try:
-		news = paginator.page(page)
-	except PageNotAnInteger:
-		news = paginator.page(1)
-	except EmptyPage:
-		news = paginator.page(paginator.num_pages)
-	print(list(news_list)[0].date)
-	return render(request, 'newsextraction/index.html', {
-			'newsList': list(news_list),
-			'isHome':True,
-		}
-	)
+	alllocationlist, ktmlocationlist, ltplocationlist, bktlocationlist, outsideLocationList, locationCount = getLocations()	
+	deathCount = getDeathCountLocation()
+	context = {
+		'allLocation': alllocationlist,
+		'locationCount': locationCount,
+		'deathCount': deathCount
+	}
+	return render(request, 'newsextraction/visualization.html', context=context) 
 
 
 
