@@ -50,39 +50,61 @@
 
 {% block script %}
 <script src="{% static 'js/area-chart.js' %}"></script>
-<!-- <script src="{% static 'js/bar-chart.js' %}"></script> -->
+<script src="{% static 'js/bar-chart.js' %}"></script>
 <script src="{% static 'js/pie-chart.js' %}"></script>
 
 <script>
 	districts = []
-	countAccident = []
+	countAccident = {}
 	deathCount = {}
+	vehicleCount = {}
 
 	{% for district, count in locationCount.items %}
-		districts.push('{{ district }}')
-		countAccident.push('{{ count }}')
+		if(countAccident['{{ district }}'.toLowerCase()] == undefined)
+			countAccident['{{ district }}'.toLowerCase()] = parseInt('{{ count }}')
+		else
+			countAccident['{{ district }}'.toLowerCase()] += parseInt('{{ count }}')
 	{% endfor %}
 
 	{% for district, count in deathCount.items %}
 		deathCount['{{ district }}'] = '{{ count }}'
 	{% endfor %}
-	console.log(deathCount)
+
+	{% for vehicle, count in vehicleCount.items %}
+		vehicleCount['{{ vehicle }}'] = '{{ count }}'
+	{% endfor %}
 
 
+	console.log(countAccident)
 	// Bar Chart Example
-	var ctx = document.getElementById("myBarChart");
-	var myLineChart = new Chart(ctx, {
-		type: 'bar',
-		data: {
-			labels: districts,
-			datasets: [{
-				label: "Accident Number",
-				backgroundColor: "rgba(2,117,216,1)",
-				borderColor: "rgba(2,117,216,1)",
-				data: countAccident,
-			}],
-		},
-	});
+	var ctxBarChart = document.getElementById("myBarChart");
+	// var myLineChart = new Chart(ctxBarChart, {
+	// 	type: 'bar',
+	// 	data: {
+	// 		labels: Object.keys(countAccident),
+	// 		datasets: [{
+	// 			label: "Accident Number",
+	// 			backgroundColor: "rgba(2,117,216,1)",
+	// 			borderColor: "rgba(2,117,216,1)",
+	// 			data: Object.values(countAccident),
+	// 		}],
+	// 	},
+	// 	options: {
+	// 		responsive: true,
+	// 		scales: {
+	// 			yAxes: {
+	// 				beginAtZero: true,
+	// 				suggestedMin: 0,
+	// 				min: 0
+	// 			}
+	// 		}
+	// 	},
+	// });
+
+
+	ctx = document.getElementById("myPieChart");
+	setPieChart(ctx, Object.keys(vehicleCount), Object.values(vehicleCount))
+	setBarChart(ctxBarChart, Object.keys(countAccident), Object.values(countAccident), "Accident Number")
 
 </script>
 {% endblock %}
