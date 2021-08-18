@@ -17,6 +17,23 @@ import urllib
 import requests
 from .extractor import DataExtractor
 from dateutil.parser import parse
+import dateutil.parser as P
+
+
+
+
+def parse(string):
+	"""
+		Parses the "{'bus', 'scooter', 'jeep'}" to a list of ['bus', 'scooter', 'jeep']
+	"""
+	if 'set()' in string:
+		return []
+	string = string[1:-1]
+	result = []
+	for elem in string.split(','):
+		result.append(elem.lstrip()[1:-1])
+	return result
+
 
 """
 	Extracts the info from the news story extracted using scrapper
@@ -54,16 +71,16 @@ def initial_check():
 	source = []
 	#parse the rss feed
 	rss = feedparser.parse(url_link)
+	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
    
    #extract links, texts , titles in rss feed
 	for post in rss.entries:
-		if post.has_key('published'):
+		if post.has_key('published') and post.link not in oldlinks:
 			links.append(post.link)
 			date.append(post.published)
 			title.append(post.title_detail.value)
 			source.append(post.author)
 		
-	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
 	
 	extractor = Goose()
 	for i in range(0, len(links)):
@@ -93,7 +110,7 @@ def extract(link, news_story, title, date, source, save = True):
 	
 	news_date = ""
 	if(date != ""):
-		news_date  = parse(date)
+		news_date  = P.parse(date)
 	month_list = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
 
@@ -257,4 +274,68 @@ def getDeathCountLocation():
 	return deathCount
 
 
+
+def getDeathCountLocation():
+	"""
+		Returns the death count of the particular location 
+	"""
+	querySet = rssdata.objects.values('location', 'injury_no')
+
+	""" import all location from kathmandu, bhaktapur, lalitpur and outside from location_tree.py """
+	ktm_location = LocationInformation().all_ktm_locations()
+	bkt_location = LocationInformation().all_bkt_locations()
+	ltp_location = LocationInformation().all_ltp_locations()
+	outside_location = LocationInformation().all_locations()
+
+	injuryCount = {}
+
+	#traverse through all the location
+	for findlocation in querySet:
+
+		""" check if defined location is in kathmandu or lalitpur or bhaktapur or others"""
+		if findlocation['location'] in ktm_location:
+			if 'Kathmandu' not in injuryCount:
+				injuryCount['Kathmandu'] = findlocation['injury_no']
+			else:
+				injuryCount['Kathmandu'] += findlocation['injury_no']
+			
+
+		elif findlocation['location'] in ltp_location:
+			if 'Lalitpur' not in injuryCount:
+				injuryCount.append('Lalitpur')
+				injuryCount['Lalitpur'] = findlocation['injury_no']
+			else:
+				injuryCount['Lalitpur'] += findlocation['injury_no']
+
+		elif findlocation['location'] in bkt_location:
+			if 'Bhaktapur' in injuryCount:
+				injuryCount.append('Bhaktapur')
+				injuryCount['Bhaktapur'] = findlocation['injury_no']
+			else:
+				injuryCount['Bhaktapur'] += findlocation['injury_no']
+
+		elif findlocation['location'] in outside_location:
+			if findlocation['location'] not in injuryCount:
+				injuryCount[findlocation['location']] = findlocation['injury_no']
+			else:
+				injuryCount[findlocation['location']] += findlocation['injury_no']
+
+	return injuryCount
+
+
 	
+def getVehicleType():
+	querySet = rssdata.objects.values('vehicleType')
+
+	vehicleCount = {}
+
+	for vehicles in querySet:
+		listOfVehicles = parse(vehicles['vehicleType'])
+		
+		for vehicle in listOfVehicles:
+			if vehicle not in vehicleCount:
+				vehicleCount[vehicle] = 1
+			else:
+				vehicleCount[vehicle] += 1
+
+	return vehicleCount	

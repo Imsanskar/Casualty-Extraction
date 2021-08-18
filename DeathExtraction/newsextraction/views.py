@@ -11,7 +11,7 @@ from .methods import *
 from django.db.models import Q #object used to encapsulate a collection of keyword arguments specified as in “Field lookups”.
 
 def index(request):
-	initial_check()
+	# initial_check()
 	news_list = rssdata.objects.all().order_by("-date")
 	return render(request, 'newsextraction/index.html', {
 			'newsList': list(news_list),
@@ -37,11 +37,14 @@ def extraction(request):
 def graph(request):
 	alllocationlist, ktmlocationlist, ltplocationlist, bktlocationlist, outsideLocationList, locationCount = getLocations()	
 	deathCount = getDeathCountLocation()
+	vehicleCount = getVehicleType()
 	context = {
 		'allLocation': alllocationlist,
 		'locationCount': locationCount,
-		'deathCount': deathCount
+		'deathCount': deathCount,
+		'vehicleCount': vehicleCount
 	}
+	print(vehicleCount)
 	return render(request, 'newsextraction/visualization.html', context=context) 
 
 
