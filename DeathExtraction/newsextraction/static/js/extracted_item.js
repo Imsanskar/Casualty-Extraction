@@ -17,14 +17,16 @@ function selectedItem(death, injury, day, month, year, vehicle, vehicleNumber, l
 	vehicleNumberDom = document.getElementById("vehicle_number")
 	locationDom = document.getElementById('location')
 	linkDom = document.getElementById("link")
+	dateDom = document.getElementById("date")
 	
-	console.log(death, injury, day, month, year, vehicle, vehicleNumber, link)
 
 	deathDom.textContent = death
 	injuryDom.textContent = injury
-	vehicleDom.textContent = vehicle
+	// vehicleDom.textContent = vehicle
 	vehicleNumberDom.textContent = vehicleNumber
 	locationDom.textContent = location
 	linkDom.textContent = link
+	dateDom.textContent = `${day} ${month}, ${year}`
+	console.log(dateDom.textContent)
 }
 
