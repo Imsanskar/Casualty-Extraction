@@ -6,27 +6,23 @@
 <main>
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">Visualization</h1>
-		<div class="card mb-4">
-			<div class="card-body">
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat nostrum ex nemo
-					assumenda, quo omnis quidem ad voluptates numquam in natus repellendus rem fugiat quis
-					dicta quisquam. Provident, minus consectetur!</p>
-			</div>
+
+		<div class="col-md-4 my-5 d-flex ">
+			<select class="form-select" aria-label="Default select example" id="dataSelect" onchange="dataSelect()">
+				<option selected value="accident">Accident Count</option>
+				<option value="death">Death Count</option>
+				<option value="injury">Injury Count</option>
+			</select>
+			<button type="button" class="btn btn-sm btn-dark mx-3" onclick="selectData">Submit</button>
+
 		</div>
 
-		<div class="card mb-4">
-			<div class="card-header">
-				<i class="fas fa-chart-area me-1"></i>
-				Area Chart
-			</div>
-			<div class="card-body"><canvas id="myAreaChart" width="100%" height="30"></canvas></div>
-		</div>
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="card mb-4">
-					<div class="card-header">
+					<div class="card-header" id="titleBarGraph">
 						<i class="fas fa-chart-bar me-1"></i>
-						Bar Chart
+						Accident Number
 					</div>
 					<div class="card-body"><canvas id="myBarChart" width="100%" height="50"></canvas></div>
 				</div>
@@ -35,7 +31,7 @@
 				<div class="card mb-4">
 					<div class="card-header">
 						<i class="fas fa-chart-pie me-1"></i>
-						Pie Chart
+						Number of accident of vehicles
 					</div>
 					<div class="card-body"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
 				</div>
@@ -50,39 +46,80 @@
 
 {% block script %}
 <script src="{% static 'js/area-chart.js' %}"></script>
-<!-- <script src="{% static 'js/bar-chart.js' %}"></script> -->
+<script src="{% static 'js/bar-chart.js' %}"></script>
 <script src="{% static 'js/pie-chart.js' %}"></script>
 
 <script>
+
+
 	districts = []
-	countAccident = []
+	countAccident = {}
 	deathCount = {}
+	vehicleCount = {}
+	var data = {}
 
 	{% for district, count in locationCount.items %}
-		districts.push('{{ district }}')
-		countAccident.push('{{ count }}')
+	if (countAccident['{{ district }}'.toLowerCase()] == undefined)
+		countAccident['{{ district }}'.toLowerCase()] = parseInt('{{ count }}')
+	else
+		countAccident['{{ district }}'.toLowerCase()] += parseInt('{{ count }}')
 	{% endfor %}
 
-	{% for district, count in deathCount.items %}
-		deathCount['{{ district }}'] = '{{ count }}'
+	{% for vehicle, count in vehicleCount.items %}
+		vehicleCount['{{ vehicle }}'] = '{{ count }}'
 	{% endfor %}
-	console.log(deathCount)
 
 
-	// Bar Chart Example
-	var ctx = document.getElementById("myBarChart");
-	var myLineChart = new Chart(ctx, {
-		type: 'bar',
-		data: {
-			labels: districts,
-			datasets: [{
-				label: "Accident Number",
-				backgroundColor: "rgba(2,117,216,1)",
-				borderColor: "rgba(2,117,216,1)",
-				data: countAccident,
-			}],
-		},
-	});
+
+	let ctxBarChart = document.getElementById("myBarChart");
+	setBarChart(ctxBarChart, Object.keys(countAccident), Object.values(countAccident), "Accident Number")
+
+
+
+
+	function dataSelect(){
+		let x = document.getElementById("dataSelect").value;
+		let titleCtx = document.getElementById("titleBarGraph")
+		data = {}
+		let ctxBarChart = document.getElementById("myBarChart");
+		if(x == "death"){
+			titleCtx.innerText = "Death Number"
+			{% for district, count in deathCount.items %}
+			if (data['{{ district }}'.toLowerCase()] == undefined)
+				data['{{ district }}'.toLowerCase()] = parseInt('{{ count }}')
+			else
+				data['{{ district }}'.toLowerCase()] += parseInt('{{ count }}')
+			{% endfor %}
+
+		}
+		if(x == "injury"){
+			titleCtx.innerText = "Injury Number"
+			{% for district, count in injuryCount.items %}
+			if (data['{{ district }}'.toLowerCase()] == undefined)
+				data['{{ district }}'.toLowerCase()] = parseInt('{{ count }}')
+			else
+				data['{{ district }}'.toLowerCase()] += parseInt('{{ count }}')
+			{% endfor %}
+		}
+		if(x == "accident"){
+			titleCtx.innerText = "Accident Number"
+			{% for district, count in locationCount.items %}
+			if (data['{{ district }}'.toLowerCase()] == undefined)
+				data['{{ district }}'.toLowerCase()] = parseInt('{{ count }}')
+			else
+				data['{{ district }}'.toLowerCase()] += parseInt('{{ count }}')
+			{% endfor %}
+		}
+		console.log(data)
+		setBarChart(ctxBarChart, Object.keys(data), Object.values(data), "Accident Number")
+	}
+
+
+
+
+
+	ctx = document.getElementById("myPieChart");
+	setPieChart(ctx, Object.keys(vehicleCount), Object.values(vehicleCount))
 
 </script>
 {% endblock %}
