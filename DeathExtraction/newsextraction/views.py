@@ -29,7 +29,7 @@ def extraction(request):
 		if(linkForm.is_valid()):
 			title, story, link = newstotext.story_extract(linkForm.cleaned_data['news_link'])
 			print(title, story, link,sep="\n")
-			newsData = extract(link, story, title, "", "", False)	
+			newsData = extract(link, story, title, "", "", linkForm.cleaned_data['isSave'])	
 			return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':True, 'news':newsData})
 	return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':False})
 
@@ -45,7 +45,8 @@ def graph(request):
 		'locationCount': locationCount,
 		'deathCount': deathCount,
 		'vehicleCount': vehicleCount,
-		'injuryCount': injuryCount
+		'injuryCount': injuryCount,
+		'isHome':False
 	}
 	print(vehicleCount)
 	return render(request, 'newsextraction/visualization.html', context=context) 
@@ -53,132 +54,134 @@ def graph(request):
 
 
 def searchView(request):
-    
+	
 
-    checks=[]
-    posts=[]
-    queries=[]
-
-
+	checks=[]
+	posts=[]
+	queries=[]
 
 
-    if request.method == 'POST':
-        form = SearchForm(data=request.POST)
-        search_main =request.POST.get('search_main')
-        all = request.POST.get('all')
-        header = request.POST.get('header')
-        body = request.POST.get('body')
-        source = request.POST.get('source')
-        death_no = request.POST.get('death_no')
-        injury_no = request.POST.get('injury_no')
-        location = request.POST.get('location')
-        date = request.POST.get('date')
-        year = request.POST.get('year')
-        month = request.POST.get('month')
-        day = request.POST.get('day')
-        search_text = request.POST.get('sname')
 
-        
-        
 
-        if search_main != None:
-            search=search_main
+	if request.method == 'POST':
+		form = SearchForm(data=request.POST)
+		search_main =request.POST.get('search_main')
+		all = request.POST.get('all')
+		header = request.POST.get('header')
+		body = request.POST.get('body')
+		source = request.POST.get('source')
+		death_no = request.POST.get('death_no')
+		injury_no = request.POST.get('injury_no')
+		location = request.POST.get('location')
+		date = request.POST.get('date')
+		year = request.POST.get('year')
+		month = request.POST.get('month')
+		day = request.POST.get('day')
+		search_text = request.POST.get('sname')
 
-            SearchForm.all=True
-            form= SearchForm
-            all='on'
-            
-        else:
-            search = search_text
+		
+		
 
-        try: 
-            int(search)
-            flag = 1
+		if search_main != None:
+			search=search_main
 
-        except ValueError:
-            flag = 0
+			SearchForm.all=True
+			form= SearchForm
+			all='on'
+			
+		else:
+			search = search_text
 
-        if (all=='on' and flag ==0):
-            queries = rssdata.objects.filter(Q(header__icontains=search)| Q(body__icontains=search)|Q(source__icontains=search)\
-                |Q(location__icontains=search)| Q(date__iexact=search)\
-                    | Q(day__icontains=search) | Q(month__icontains=search))
-            for query in queries:
-                posts.append(query)
+		try: 
+			int(search)
+			flag = 1
 
-        elif(all == 'on' and flag == 1):
-            queries = rssdata.objects.filter(Q(header__icontains=search)| Q(body__icontains=search)|Q(source__icontains=search)\
-                |Q(death_no__iexact=int(search))|Q(location__icontains=search)| Q(injury_no__iexact=int(search))| Q(date__iexact=search)\
-                    |Q(year__iexact=int(search))| Q(day__icontains=search) | Q(month__icontains=search))
-            for query in queries:
-                posts.append(query)
+		except ValueError:
+			flag = 0
 
-        else:
+		if (all=='on' and flag ==0):
+			queries = rssdata.objects.filter(Q(header__icontains=search)| Q(body__icontains=search)|Q(source__icontains=search)\
+				|Q(location__icontains=search)| Q(date__iexact=search)\
+					| Q(day__icontains=search) | Q(month__icontains=search))
+			for query in queries:
+				posts.append(query)
 
-            if header=='on':
-                queries = rssdata.objects.filter(Q(header__icontains=search))
-                for query in queries:
-                    posts.append(query)
+		elif(all == 'on' and flag == 1):
+			queries = rssdata.objects.filter(Q(header__icontains=search)| Q(body__icontains=search)|Q(source__icontains=search)\
+				|Q(death_no__iexact=int(search))|Q(location__icontains=search)| Q(injury_no__iexact=int(search))| Q(date__iexact=search)\
+					|Q(year__iexact=int(search))| Q(day__icontains=search) | Q(month__icontains=search))
+			for query in queries:
+				posts.append(query)
 
-            if body=='on':
-                queries = rssdata.objects.filter(Q(body__icontains=search))
-                for query in queries:
-                    posts.append(query)
-            if source=='on':
-                queries = rssdata.objects.filter(Q(source__icontains=search))
-                for query in queries:
-                    posts.append(query)
+		else:
 
-            if (death_no=='on' or flag == 1):
-                queries = rssdata.objects.filter(Q(death_no__iexact=int(search)))
-                for query in queries:
-                    posts.append(query)
-            
-            if location=='on':
-                queries = rssdata.objects.filter(Q(location__icontains=search))
-                for query in queries:
-                    posts.append(query)
+			if header=='on':
+				queries = rssdata.objects.filter(Q(header__icontains=search))
+				for query in queries:
+					posts.append(query)
 
-            if (injury_no=='on' and flag == 1):
-                queries = rssdata.objects.filter(Q(injury_no__iexact=int(search)))
-                for query in queries:
-                    posts.append(query)
-                    
+			if body=='on':
+				queries = rssdata.objects.filter(Q(body__icontains=search))
+				for query in queries:
+					posts.append(query)
+			if source=='on':
+				queries = rssdata.objects.filter(Q(source__icontains=search))
+				for query in queries:
+					posts.append(query)
 
-            if date=='on':
-                queries = rssdata.objects.filter(Q(date__iexact=search))
-                for query in queries:
-                    posts.append(query)
+			if (death_no=='on' or flag == 1):
+				queries = rssdata.objects.filter(Q(death_no__iexact=int(search)))
+				for query in queries:
+					posts.append(query)
+			
+			if location=='on':
+				queries = rssdata.objects.filter(Q(location__icontains=search))
+				for query in queries:
+					posts.append(query)
 
-            if (year=='on' and flag == 1):
-                queries = rssdata.objects.filter(Q(year__iexact=int(search)))
-                for query in queries:
-                    posts.append(query)
+			if (injury_no=='on' and flag == 1):
+				queries = rssdata.objects.filter(Q(injury_no__iexact=int(search)))
+				for query in queries:
+					posts.append(query)
+					
 
-            if day=='on':
-                queries = rssdata.objects.filter(Q(day__icontains=search))
-                for query in queries:
-                    posts.append(query)
-            if month=='on':
-                queries = rssdata.objects.filter(Q(month__icontains=search))
-                for query in queries:
-                    posts.append(query)
-        
-        posts= list(set(posts))
+			if date=='on':
+				queries = rssdata.objects.filter(Q(date__iexact=search))
+				for query in queries:
+					posts.append(query)
 
-        context ={}
-        context['form']= form
-        context['posts']=posts
-        context['search'] =search
+			if (year=='on' and flag == 1):
+				queries = rssdata.objects.filter(Q(year__iexact=int(search)))
+				for query in queries:
+					posts.append(query)
 
-        return render(request, 'newsextraction/search.html', context)
-    
-    else:
-        
-        
-        print("bbb")
-        context ={}
-        context['form']= SearchForm()
-        return render(request, 'newsextraction/search.html', context)
+			if day=='on':
+				queries = rssdata.objects.filter(Q(day__icontains=search))
+				for query in queries:
+					posts.append(query)
+			if month=='on':
+				queries = rssdata.objects.filter(Q(month__icontains=search))
+				for query in queries:
+					posts.append(query)
+		
+		posts= list(set(posts))
+
+		context ={}
+		context['form']= form
+		context['posts']=posts
+		context['search'] =search
+		context['isHome'] = False
+
+		return render(request, 'newsextraction/search.html', context)
+	
+	else:
+		
+		
+		print("bbb")
+		context ={}
+		context['form']= SearchForm()
+		context['isHome'] = False
+		return render(request, 'newsextraction/search.html', context)
 
 
 

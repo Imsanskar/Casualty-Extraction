@@ -9,6 +9,11 @@
 			<label for="newsLinkForm" class="form-label">News Link</label>
 			{{ form.news_link }}
 			<div id="newshelp" class="form-text">Enter your link to extract information.</div>
+			<div>
+				Save
+				{{ form.isSave }}
+			</div>
+			
 		</div>
 
 		<a href="extraction"><button class="btn btn-primary" id="linksubmit">Submit</button></a>
