@@ -50,6 +50,8 @@
 <script src="{% static 'js/pie-chart.js' %}"></script>
 
 <script>
+	var data = {}
+	var barChart;
 
 
 	districts = []
@@ -66,23 +68,49 @@
 	{% endfor %}
 
 	{% for vehicle, count in vehicleCount.items %}
-		vehicleCount['{{ vehicle }}'] = '{{ count }}'
+	vehicleCount['{{ vehicle }}'] = '{{ count }}'
 	{% endfor %}
 
 
 
 	let ctxBarChart = document.getElementById("myBarChart");
-	setBarChart(ctxBarChart, Object.keys(countAccident), Object.values(countAccident), "Accident Number")
+	barChart = new Chart(ctxBarChart, {
+		type: 'bar',
+		data: {
+			labels: Object.keys(countAccident),
+			datasets: [{
+				label: "Accident Number",
+				backgroundColor: "rgba(2,117,216,1)",
+				borderColor: "rgba(2,117,216,1)",
+				data: Object.values(countAccident),
+			}],
+		},
+		options: {
+			legend: {
+				display: false
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true,
+						min: 0
+					}
+				}]
+			}
+		}
+	});
+	// setBarChart(ctxBarChart, Object.keys(countAccident), Object.values(countAccident), "Accident Number")
 
 
 
 
-	function dataSelect(){
+	function dataSelect() {
 		let x = document.getElementById("dataSelect").value;
 		let titleCtx = document.getElementById("titleBarGraph")
-		data = {}
 		let ctxBarChart = document.getElementById("myBarChart");
-		if(x == "death"){
+		data = {}
+		barChart.destroy()
+		if (x == "death") {
 			titleCtx.innerText = "Death Number"
 			{% for district, count in deathCount.items %}
 			if (data['{{ district }}'.toLowerCase()] == undefined)
@@ -92,7 +120,7 @@
 			{% endfor %}
 
 		}
-		if(x == "injury"){
+		if (x == "injury") {
 			titleCtx.innerText = "Injury Number"
 			{% for district, count in injuryCount.items %}
 			if (data['{{ district }}'.toLowerCase()] == undefined)
@@ -101,7 +129,7 @@
 				data['{{ district }}'.toLowerCase()] += parseInt('{{ count }}')
 			{% endfor %}
 		}
-		if(x == "accident"){
+		if (x == "accident") {
 			titleCtx.innerText = "Accident Number"
 			{% for district, count in locationCount.items %}
 			if (data['{{ district }}'.toLowerCase()] == undefined)
@@ -111,7 +139,31 @@
 			{% endfor %}
 		}
 		console.log(data)
-		setBarChart(ctxBarChart, Object.keys(data), Object.values(data), "Accident Number")
+		barChart = new Chart(ctxBarChart, {
+			type: 'bar',
+			data: {
+				labels: Object.keys(data),
+				datasets: [{
+					label: titleCtx.innerText,
+					backgroundColor: "rgba(2,117,216,1)",
+					borderColor: "rgba(2,117,216,1)",
+					data: Object.values(data),
+				}],
+			},
+			options: {
+				legend: {
+					display: false
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true,
+							min: 0
+						}
+					}]
+				}
+			}
+		});
 	}
 
 
