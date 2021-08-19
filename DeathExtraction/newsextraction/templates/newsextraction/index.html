@@ -19,7 +19,7 @@
 									'{{ news.month }}', 
 									'{{ news.year }}',
 									'{{ news.vehicle }}',
-									'{{ vehicle_number }}', 
+									'{{ news.vehicleCode }}', 
 									'{{ news.location }}',
 									'{{ news.link }}'
 							
@@ -44,7 +44,7 @@
 										<h2>Extracted items</h2>
 										<div>Death Count: <span id="deathcount"></span></div>
 										<div>Injured Count: <span id="injuredcount"></span></div>
-										<div>Vehicle: <span id="vehicle"></span></div>
+										<!-- <div>Vehicle: <span id="vehicle"></span></div> -->
 										<div>Vehicle Number: <span id="vehicle_number"></span></div>
 										<div>Location: <span id="location"></span></div>
 										<div>Date: <span id="date"></span></div>
@@ -107,7 +107,6 @@
 	}
 	{% endfor %}
 </script>
-<script src="{% static 'js/location.js' %}"></script>
 <script src="{% static 'js/mapscript.js' %}"></script>
 
 {% endblock %}
