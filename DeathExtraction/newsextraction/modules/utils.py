@@ -114,6 +114,10 @@ def extract(link, news_story, title, date, source, save = True):
 		news_date  = P.parse(date)
 	else:
 		news_date = news.get_date(link)
+		if(news_date != ""):
+			news_date = P.parse(news_date)
+			date = news_date
+		print(date)
 	month_list = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
 
@@ -137,6 +141,12 @@ def extract(link, news_story, title, date, source, save = True):
 	except ValueError:
 		injuryNumber = convertNum(injuryNo)
 	
+	# oldlink so that news are not duplicated
+	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
+
+	if link not in oldlinks:
+		save = False
+
 	#change this later
 	news_data = rssdata(header=title,
 					 source=source,
