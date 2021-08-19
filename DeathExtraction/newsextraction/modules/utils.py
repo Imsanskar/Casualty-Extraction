@@ -107,10 +107,13 @@ def extract(link, news_story, title, date, source, save = True):
 	pos_tagged_sentences = tagger.getTaggedSentences()
 	data_extractor = DataExtractor(pos_tagged_sentences, news_story,title)
 	vehicleGazetter = VehicleInformation(news_story)
+	print(news.get_date(link))
 	
 	news_date = ""
 	if(date != ""):
 		news_date  = P.parse(date)
+	else:
+		news_date = news.get_date(link)
 	month_list = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
 
@@ -275,7 +278,7 @@ def getDeathCountLocation():
 
 
 
-def getDeathCountLocation():
+def getInjuryCountLocation():
 	"""
 		Returns the death count of the particular location 
 	"""

@@ -38,11 +38,14 @@ def graph(request):
 	alllocationlist, ktmlocationlist, ltplocationlist, bktlocationlist, outsideLocationList, locationCount = getLocations()	
 	deathCount = getDeathCountLocation()
 	vehicleCount = getVehicleType()
+	injuryCount = getInjuryCountLocation()
+	print(injuryCount)
 	context = {
 		'allLocation': alllocationlist,
 		'locationCount': locationCount,
 		'deathCount': deathCount,
-		'vehicleCount': vehicleCount
+		'vehicleCount': vehicleCount,
+		'injuryCount': injuryCount
 	}
 	print(vehicleCount)
 	return render(request, 'newsextraction/visualization.html', context=context) 
