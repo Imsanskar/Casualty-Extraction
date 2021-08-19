@@ -41,6 +41,7 @@
 		<!-- Navbar Brand-->
 		<a class="navbar-brand ps-3" href="{% url 'newsextraction:home' %}">Disaster Extraction</a>
 
+		{% if isHome %}
 		<!-- Navbar Search-->
 		<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" method="POST" action="/search/">
 		{% csrf_token %}
@@ -51,6 +52,7 @@
 						class="fas fa-search" ></i></button>
 			</div>
 		</form>
+		{% endif %}
 		<!-- Navbar-->
 	</nav>
 	<!-- Side Navbar-->
