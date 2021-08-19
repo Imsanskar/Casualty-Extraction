@@ -268,7 +268,7 @@ $(document).ready(function () {
         position: new google.maps.LatLng(position[0], position[1]),
         map: map,
         title: `
-			Place: ${locationList[i]}\nDeath: ${countDeathNumber[locationList[i]]}\nInjury: ${countInjuryNumber[locationList[i]]}
+			Place: ${locationList[i]}\nDeath: ${countDeathNumber[locationList[i]]}\nInjury: ${countInjuryNumber[locationList[i]]}\nNo. of accident: ${countAccident[locationList[i]]}
 		`,
       });
     }
