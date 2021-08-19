@@ -6,7 +6,7 @@
 import torch
 from nltk.stem import WordNetLemmatizer
 from .wordNum import *
-from DeathExtraction import question_answerer
+from newsextraction import question_answerer
 
 def death_no(news, header):
 	# instance for lemmatizer
@@ -31,16 +31,16 @@ def death_no(news, header):
 	score = death['score']
 	answer = death['answer']
 	for verb in deathverb:
-		if verb in header:
-			death = question_answerer(
-				{
-					'question': 'How many people died?',
-					'context': header
-				}
-			)
-			if death['score'] > score:
-				score = death['score']
-				answer = death['answer']
+		# if verb in header:
+		# 	death = question_answerer(
+		# 		{
+		# 			'question': 'How many people died?',
+		# 			'context': header
+		# 		}
+		# 	)
+		# 	if death['score'] > score:
+		# 		score = death['score']
+		# 		answer = death['answer']
 
 
 		# only calculate the score if the verb is in the context
@@ -60,8 +60,6 @@ def death_no(news, header):
 def injury_no(news, header):
 	injuryverb = ['injure', 'sustain', 'critical', 'hurt', 'wound', 'harm', 'trauma']
 	verbs = []
-	death = "None"
-	question = "died"
 	
 	
 	if len(news) > 150:
