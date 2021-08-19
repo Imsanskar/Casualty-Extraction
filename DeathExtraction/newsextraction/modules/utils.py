@@ -144,7 +144,7 @@ def extract(link, news_story, title, date, source, save = True):
 	# oldlink so that news are not duplicated
 	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
 
-	if link not in oldlinks:
+	if link in oldlinks:
 		save = False
 
 	#change this later
