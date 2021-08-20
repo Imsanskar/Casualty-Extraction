@@ -67,6 +67,7 @@
 	{% endfor %}
 
 	{% for vehicle, count in vehicleCount.items %}
+	if ('{{ vehicle }}' != "")
 	vehicleCount['{{ vehicle }}'] = '{{ count }}'
 	{% endfor %}
 

@@ -117,11 +117,10 @@ def extract(link, news_story, title, date, source, save = True):
 		if(news_date != ""):
 			news_date = P.parse(news_date)
 			date = news_date
-		print(date)
 	month_list = [ "January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December" ];
 
-	vehicles, isTwo, isThree, isFour = vehicleGazetter.find_vehicles()
+	vehicles, isTwo, isThree, isFour, numberOfVehicles = vehicleGazetter.find_vehicles()
 
 
 	deathNo = death_no(news_story, str(title))
@@ -161,7 +160,7 @@ def extract(link, news_story, title, date, source, save = True):
 					 month = month_list[news_date.month - 1] if date != "" else "",
 					 year = news_date.year if date != "" else "",
 					 day = news_date.day if date != "" else "",
-					 vehicleNo = len(vehicles),
+					 vehicleNo = numberOfVehicles,
 					 vehicleCode = data_extractor.vehicle(),
 					 vehicleType = vehicles
 					 )
@@ -343,7 +342,7 @@ def getVehicleType():
 	vehicleCount = {}
 
 	for vehicles in querySet:
-		listOfVehicles = parse(vehicles['vehicleType'])
+		listOfVehicles = vehicles['vehicleType'].split(',')
 		
 		for vehicle in listOfVehicles:
 			if vehicle not in vehicleCount:

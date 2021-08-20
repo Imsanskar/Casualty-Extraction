@@ -106,5 +106,9 @@ class DataExtractor:
 					vehicle = vehicle + str(p[0]) + " "
 				vehicles.append(vehicle[:-1])
 
-		return (vehicles)
+		returnString = ""
+		for v in vehicles:
+			returnString += "," + v
+
+		return returnString[1:]
 	
