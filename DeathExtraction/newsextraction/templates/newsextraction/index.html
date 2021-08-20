@@ -1,91 +1,112 @@
 {% extends "base.html" %}
-
-{% block body %}   
-    <div class="row">
-        <div class="card-content column col-sm-8 ">
-            <h1 class="mt-4 my-5 border-bottom">Recent Activities</h1>
-			{% for news in newsList %}
-            <div class="card my-2 ">
-                <h3 class="card-header text-white bg-dark">{{ news.day }} {{ news.month }} {{ news.year }}</h3>
-                <div class="card-body">
-                    <h4 class="card-title">{{ news.header }}</h4>
-                    <p class="card-text small">Source: {{ news.source }}</p>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"
-                            data-bs-target="#Modal"
-							onclick = "selectedItem(
+{% load static %}
+{% block body %}
+<div class="row">
+	<div class="card-content column col-sm-8 ">
+		<h1 class="mt-4 my-5 border-bottom">Recent Activities</h1>
+		{% for news in newsList %}
+		<div class="card my-2 ">
+			<h3 class="card-header text-white bg-dark">{{ news.day }} {{ news.month }} {{ news.year }}</h3>
+			<div class="card-body">
+				<h4 class="card-title">{{ news.header }}</h4>
+				<p class="card-text small">Source: {{ news.source }}</p>
+				<div class="card-footer d-flex align-items-center justify-content-between">
+					<button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#Modal"
+						onclick="selectedItem(
 									'{{ news.death }}', 
 									'{{ news.injury }}', 
 									'{{ news.day }}', 
 									'{{ news.month }}', 
 									'{{ news.year }}',
 									'{{ news.vehicle }}',
-									'{{ vehicle_number }}', 
+									'{{ news.vehicleCode }}', 
 									'{{ news.location }}',
 									'{{ news.link }}'
 							
-								)"
-							>
-                            View More
-                        </button>
+								)">
+						View More
+					</button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="Modal" tabindex="-1"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Extracted items
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
+					<!-- Modal -->
+					<div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Extracted items
+									</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
 
-                                        <div class="card-body cardbodycontainer">
-											<h2>Extracted items</h2>
-											<div>Death Count: <span id="deathcount"></span></div>
-											<div>Injured Count: <span id="injuredcount"></span></div>
-											<div>Vehicle: <span id="vehicle"></span></div>
-											<div>Vehicle Number: <span id = "vehicle_number"></span></div>
-											<div>Location: <span id="location"></span></div>
-											<div>Date: <span id="date"></span></div>
-											<div>Link: <span id="link"></span></div>
-                                        </div>
+									<div class="card-body cardbodycontainer">
+										<h2>Extracted items</h2>
+										<div>Death Count: <span id="deathcount"></span></div>
+										<div>Injured Count: <span id="injuredcount"></span></div>
+										<!-- <div>Vehicle: <span id="vehicle"></span></div> -->
+										<div>Vehicle Number: <span id="vehicle_number"></span></div>
+										<div>Location: <span id="location"></span></div>
+										<div>Date: <span id="date"></span></div>
+										<div>Link: <span id="link"></span></div>
+									</div>
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-			{% endfor %}
-
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
 
 
-        </div>
 
-        <div class="column col-sm-4">
-            <div class="mapcontainer mb-3 col-sm-12" id="mapcontainer"></div>
-        </div>
+	</div>
 
-    </div>
+	<div class="column col-sm-4">
+		<div class="mapcontainer mb-3 col-sm-12" id="mapcontainer"></div>
+	</div>
+
+</div>
 
 
 {% endblock %}
 
 
 {% block script %}
-	<script>
-		let locationList = []
-		{% for news in newsList %}
-			locationList.push('{{ news.location }}')			
-		{% endfor %}
-	</script>
+<script>
+	var locationList = []
+	var countAccident = {}
+	var countDeathNumber = {}
+	var countInjuryNumber = {}
+	{% for news in newsList %}
+	if ('{{ news.location }}' != "[]") {
+		locationList.push('{{ news.location }}')
+
+		if (countAccident['{{ news.location }}'.toLowerCase()] == undefined)
+			countAccident['{{ news.location }}'.toLowerCase()] = 1
+		else
+			countAccident['{{ news.location }}'.toLowerCase()] += 1
+
+		if (countDeathNumber['{{ news.location }}'.toLowerCase()] == undefined)
+			countDeathNumber['{{ news.location }}'.toLowerCase()] = parseInt('{{ news.death_no }}')
+		else
+			countDeathNumber['{{ news.location }}'.toLowerCase()] += parseInt('{{ news.death_no }}')
+
+
+
+		if (countInjuryNumber['{{ news.location }}'.toLowerCase()] == undefined)
+			countInjuryNumber['{{ news.location }}'.toLowerCase()] = parseInt('{{ news.injury_no }}')
+		else
+			countInjuryNumber['{{ news.location }}'.toLowerCase()] += parseInt('{{ news.injury_no }}')
+	}
+	{% endfor %}
+</script>
+<script src="{% static 'js/mapscript.js' %}"></script>
 
 {% endblock %}

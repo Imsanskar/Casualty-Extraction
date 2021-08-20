@@ -9,6 +9,11 @@
 			<label for="newsLinkForm" class="form-label">News Link</label>
 			{{ form.news_link }}
 			<div id="newshelp" class="form-text">Enter your link to extract information.</div>
+			<div>
+				Save
+				{{ form.isSave }}
+			</div>
+			
 		</div>
 
 		<a href="extraction"><button class="btn btn-primary" id="linksubmit">Submit</button></a>
@@ -24,6 +29,7 @@
 			<div>Location: <span>{{ news.location }}</span></div>
 			<div>No of vehicles: <span>{{ news.vehicleNo }}</span></div>
 			<div>Vehicle Types: <span>{{ news.vehicleType }}</span></div>
+			<div>Vehicle Number: <span>{{ news.vehicleCode }}</span></div>
 			<div>Link: <span>{{ news.link }}</span></div>
 		</div>
 

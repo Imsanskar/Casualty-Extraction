@@ -25,8 +25,8 @@ class DataExtractor:
 		gpe=[]
 		doc = nlp(str(self.title))
 		for ent in doc.ents:
-   			if (ent.label_ == 'GPE'):
-				   gpe.append(ent.text)
+			if (ent.label_ == 'GPE'):
+				gpe.append(ent.text)
 
 		return gpe
 

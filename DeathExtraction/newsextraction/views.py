@@ -4,31 +4,15 @@ from newsextraction.modules import newstotext
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, response
-
+from newsextraction.modules.locationTree import LocationInformation
 from .forms import NameForm,SearchForm
 from .models import *
 from .methods import *
 from django.db.models import Q #object used to encapsulate a collection of keyword arguments specified as in “Field lookups”.
 
 def index(request):
-	"""
-	this function runs at the start of the website and if there is any new news it extracts before fully rendering the website.
-	"""
 	initial_check()
 	news_list = rssdata.objects.all().order_by("-date")
-	page = request.GET.get('page', 1)
-
-
-
-
-	paginator = Paginator(news_list, 5)
-	try:
-		news = paginator.page(page)
-	except PageNotAnInteger:
-		news = paginator.page(1)
-	except EmptyPage:
-		news = paginator.page(paginator.num_pages)
-	print(list(news_list)[0].date)
 	return render(request, 'newsextraction/index.html', {
 			'newsList': list(news_list),
 			'isHome':True,
@@ -45,34 +29,32 @@ def extraction(request):
 		if(linkForm.is_valid()):
 			title, story, link = newstotext.story_extract(linkForm.cleaned_data['news_link'])
 			print(title, story, link,sep="\n")
-			newsData = extract(link, story, title, "", "", False)	
+			newsData = extract(link, story, title, "", "", linkForm.cleaned_data['isSave'])	
 			return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':True, 'news':newsData})
 	return render(request, 'newsextraction/extraction.html', {'isHome':False, 'form':linkForm, 'isData':False})
 
 
 def graph(request):
-	return render(request, 'newsextraction/visualization.html') 
-	paginator = Paginator(news_list, 5)
-	try:
-		news = paginator.page(page)
-	except PageNotAnInteger:
-		news = paginator.page(1)
-	except EmptyPage:
-		news = paginator.page(paginator.num_pages)
-	print(list(news_list)[0].date)
-	return render(request, 'newsextraction/index.html', {
-			'newsList': list(news_list),
-			'isHome':True,
-		}
-	)
+	alllocationlist, ktmlocationlist, ltplocationlist, bktlocationlist, outsideLocationList, locationCount = getLocations()	
+	deathCount = getDeathCountLocation()
+	vehicleCount = getVehicleType()
+	injuryCount = getInjuryCountLocation()
+	print(injuryCount)
+	context = {
+		'allLocation': alllocationlist,
+		'locationCount': locationCount,
+		'deathCount': deathCount,
+		'vehicleCount': vehicleCount,
+		'injuryCount': injuryCount,
+		'isHome':False
+	}
+	print(vehicleCount)
+	return render(request, 'newsextraction/visualization.html', context=context) 
 
 
 
 def searchView(request):
-
-	"""
-	This function renders the search form and search results.
-	"""
+	
 
 	checks=[]
 	posts=[]
@@ -80,7 +62,7 @@ def searchView(request):
 
 
 
-#retrieving the input from users.
+
 	if request.method == 'POST':
 		form = SearchForm(data=request.POST)
 		search_main =request.POST.get('search_main')
@@ -99,12 +81,7 @@ def searchView(request):
 
 		
 		
-		"""
-		checking if the search request is from homepage or searchform
-		search_main-> homepage 
-		search_text-> searchform
 
-		"""
 		if search_main != None:
 			search=search_main
 
@@ -115,9 +92,6 @@ def searchView(request):
 		else:
 			search = search_text
 
-		
-		
-		#checking if input string can be converted to int value or not
 		try: 
 			int(search)
 			flag = 1
@@ -125,8 +99,6 @@ def searchView(request):
 		except ValueError:
 			flag = 0
 
-		
-		#querying the database as requested by the user
 		if (all=='on' and flag ==0):
 			queries = rssdata.objects.filter(Q(header__icontains=search)| Q(body__icontains=search)|Q(source__icontains=search)\
 				|Q(location__icontains=search)| Q(date__iexact=search)\
@@ -212,3 +184,22 @@ def searchView(request):
 		return render(request, 'newsextraction/search.html', context)
 
 
+
+
+
+
+
+def about_us(request):
+	return render(request, 'about_us.html')
+
+
+def contact_us(request):
+	return render(request, 'contact_us.html')
+
+def searchquery(request):
+	if request.POST:
+		query = request.POST.get('query', None)
+		querylist = rssdata.objects.values('body').filter(Q(body__icontains=query))
+
+		return render(request, 'searchquery.html',{'searchquery':querylist,
+													'query':query,})
