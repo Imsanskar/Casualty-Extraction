@@ -15,8 +15,8 @@ def death_no(news, header):
 	# comparision verbs
 	deathverb = ['died', 'killed', 'crushed', 'passed', 'die', 'kill', 'dead']
 
-	if len(news) > 100:
-		context = news[:100]
+	if len(news) > 300:
+		context = news[:300]
 	else:
 		context = news
 	
@@ -62,8 +62,8 @@ def injury_no(news, header):
 	verbs = []
 	
 	
-	if len(news) > 150:
-		context = news[:150]
+	if len(news) > 300:
+		context = news[:300]
 	else:
 		context = news
 
