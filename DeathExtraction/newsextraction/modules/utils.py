@@ -95,7 +95,35 @@ def extract(link, news_story, title, date, source, save = True):
 
 	vehicles, isTwo, isThree, isFour = vehicleGazetter.find_vehicles()
 
+<<<<<<< Updated upstream
 	#change this later
+=======
+
+	deathNo = death_no(news_story, str(title))
+	injuryNo = injury_no(news_story, str(title))
+
+
+	deathNumber = 0
+	injuryNumber = 0
+	try:
+		deathNumber = int(text2int(deathNo))
+	except ValueError:
+		deathNumber = convertNum(deathNo)
+
+
+	try:
+		injuryNumber = int(text2int(injuryNo))
+	except ValueError:
+		injuryNumber = convertNum(injuryNo)
+	
+	# oldlink so that news are not duplicated
+	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
+
+	if link in oldlinks:
+		save = False
+
+
+>>>>>>> Stashed changes
 	news_data = rssdata(header=title,
 					 source=source,
 					 body=str(news_story),
