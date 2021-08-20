@@ -95,9 +95,6 @@ def extract(link, news_story, title, date, source, save = True):
 
 	vehicles, isTwo, isThree, isFour = vehicleGazetter.find_vehicles()
 
-<<<<<<< Updated upstream
-	#change this later
-=======
 
 	deathNo = death_no(news_story, str(title))
 	injuryNo = injury_no(news_story, str(title))
@@ -123,7 +120,6 @@ def extract(link, news_story, title, date, source, save = True):
 		save = False
 
 
->>>>>>> Stashed changes
 	news_data = rssdata(header=title,
 					 source=source,
 					 body=str(news_story),

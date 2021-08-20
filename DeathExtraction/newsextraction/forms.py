@@ -9,20 +9,6 @@ class NameForm(forms.Form):
 
 
 class SearchForm(forms.Form):
-<<<<<<< Updated upstream
-    
-    all = forms.BooleanField(widget=forms.CheckboxInput(),initial=True,required=False)
-    header = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    body = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    source = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    location = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    death_no = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    injury_no = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    date = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    year = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    month = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-    day = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
-=======
 	"""
 	For search form, we create checkboxes for searching in different entities of database. 
 	"""
@@ -37,4 +23,3 @@ class SearchForm(forms.Form):
 	year = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
 	month = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
 	day = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
->>>>>>> Stashed changes
