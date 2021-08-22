@@ -19,6 +19,9 @@ class DataExtractor:
 
 	
 	def get_title_location_chunks(self):
+		"""
+		extract the location i.e label == GPE means location
+		"""
 		gpe=[]
 		doc = nlp(str(self.title))
 		for ent in doc.ents:
@@ -28,6 +31,10 @@ class DataExtractor:
 		return gpe
 
 	def get_body_location_chunks(self):
+
+		"""
+		extract the location i.e label == GPE means location
+		"""
 		gpe=[]
 		doc = nlp(str(self.news))
 		for ent in doc.ents:
@@ -62,7 +69,11 @@ class DataExtractor:
 		max_ratio = 0
 		max_location = []
 
-		for glocation in locations_final[0:len(locations_final) // 2 + 1]:
+		"""
+		here we match and verify the location according to the one stored in our location tree.
+		"""
+
+		for glocation in locations_final:
 			for location in all_locations:
 				dist = nltk.edit_distance(glocation, location)
 				ratio = (1 - (dist / len(glocation))) * 100

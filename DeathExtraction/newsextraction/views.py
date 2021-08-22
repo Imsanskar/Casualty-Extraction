@@ -10,6 +10,8 @@ from .models import *
 from .methods import *
 from django.db.models import Q #object used to encapsulate a collection of keyword arguments specified as in “Field lookups”.
 
+
+#runs at start of loading the webpage i.e is homepage, extracts info and load the page
 def index(request):
 	initial_check()
 	news_list = rssdata.objects.all().order_by("-date")
@@ -21,7 +23,7 @@ def index(request):
 
 
 
-
+#
 def extraction(request):
 	linkForm = NameForm()
 	if request.method == 'POST':
@@ -54,7 +56,9 @@ def graph(request):
 
 
 def searchView(request):
-	
+	"""
+	renders the searchform and view the search results
+	"""
 
 	checks=[]
 	posts=[]
@@ -62,7 +66,7 @@ def searchView(request):
 
 
 
-
+    #retrieving the inputs from user
 	if request.method == 'POST':
 		form = SearchForm(data=request.POST)
 		search_main =request.POST.get('search_main')
@@ -81,7 +85,11 @@ def searchView(request):
 
 		
 		
-
+		"""
+		checking if the search request is from the homepage or searchform
+		search_main -> homepage(search in all fields)
+		search_text -> searchform(search according to the fields selected in search form)
+		"""
 		if search_main != None:
 			search=search_main
 
@@ -92,12 +100,17 @@ def searchView(request):
 		else:
 			search = search_text
 
+
+
+		#checking if the search string can be converted to int value or not
 		try: 
 			int(search)
 			flag = 1
 
 		except ValueError:
 			flag = 0
+
+		#querying according to the fields selected
 
 		if (all=='on' and flag ==0):
 			queries = rssdata.objects.filter(Q(header__icontains=search)| Q(body__icontains=search)|Q(source__icontains=search)\
@@ -184,22 +197,3 @@ def searchView(request):
 		return render(request, 'newsextraction/search.html', context)
 
 
-
-
-
-
-
-def about_us(request):
-	return render(request, 'about_us.html')
-
-
-def contact_us(request):
-	return render(request, 'contact_us.html')
-
-def searchquery(request):
-	if request.POST:
-		query = request.POST.get('query', None)
-		querylist = rssdata.objects.values('body').filter(Q(body__icontains=query))
-
-		return render(request, 'searchquery.html',{'searchquery':querylist,
-													'query':query,})
