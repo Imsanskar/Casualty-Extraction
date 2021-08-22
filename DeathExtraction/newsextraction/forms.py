@@ -9,8 +9,10 @@ class NameForm(forms.Form):
 
 
 class SearchForm(forms.Form):
-	
-	all = forms.BooleanField(widget=forms.CheckboxInput(),initial=True,required=False)
+	"""
+	form for creating the search form including all the checkboxes to query the search
+	"""
+	all = forms.BooleanField(widget=forms.CheckboxInput(),initial=True,required=False) # initially search in all fields
 	header = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
 	body = forms.BooleanField(widget=forms.CheckboxInput(),required=False)
 	source = forms.BooleanField(widget=forms.CheckboxInput(),required=False)

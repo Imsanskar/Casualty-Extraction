@@ -60,6 +60,7 @@ def extractInfo(newsStory:str) -> DataExtractor:
 	return extractedData
 
 #scrape rss feed
+#runs at start of loading website to extract necessary info before rendering the info
 def initial_check():
 	url_link = "https://rss.app/feeds/NZxckjuk8A0VhGpG.xml"
 	# create your own rss here
