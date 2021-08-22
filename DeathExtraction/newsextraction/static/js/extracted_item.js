@@ -19,6 +19,7 @@ function selectedItem(obj, death, injury, day, month, year, vehicleNumber, locat
 	linkDom = document.getElementById("link")
 	dateDom = document.getElementById("date")
 	
+	day = obj["day"]
 	death = obj["death"]
 	injury = obj["injury"]
 	month = obj["month"]

@@ -44,9 +44,9 @@ class DataExtractor:
 		locations =[]
 		locations=self.get_title_location_chunks()
 		if len(locations) != 0:
-			print(len(locations))
-		else:
-			locations= self.get_body_location_chunks()
+			print(locations)
+			return locations[0]
+		locations.extend(self.get_body_location_chunks())
 
 
 		return_value = locations
@@ -62,7 +62,7 @@ class DataExtractor:
 		max_ratio = 0
 		max_location = []
 
-		for glocation in locations_final:
+		for glocation in locations_final[0:len(locations_final) // 2 + 1]:
 			for location in all_locations:
 				dist = nltk.edit_distance(glocation, location)
 				ratio = (1 - (dist / len(glocation))) * 100
