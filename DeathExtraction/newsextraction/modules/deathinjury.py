@@ -31,16 +31,16 @@ def death_no(news, header):
 	score = death['score']
 	answer = death['answer']
 	for verb in deathverb:
-		# if verb in header:
-		# 	death = question_answerer(
-		# 		{
-		# 			'question': 'How many people died?',
-		# 			'context': header
-		# 		}
-		# 	)
-		# 	if death['score'] > score:
-		# 		score = death['score']
-		# 		answer = death['answer']
+		if verb in header:
+			death = question_answerer(
+				{
+					'question': 'How many people died?',
+					'context': header
+				}
+			)
+			if death['score'] > score:
+				score = death['score']
+				answer = death['answer']
 
 
 		# only calculate the score if the verb is in the context
@@ -79,16 +79,16 @@ def injury_no(news, header):
 	score = injury['score']
 	answer = injury['answer']
 	for verb in injuryverb:
-		# if verb in header:
-		# 	injury = question_answerer(
-		# 		{
-		# 			'question': 'How many people died?',
-		# 			'context': header
-		# 		}
-		# 	)
-		# 	if injury['score'] > score:
-		# 		score = injury['score']
-		# 		answer = injury['answer']
+		if verb in header:
+			injury = question_answerer(
+				{
+					'question': 'How many people died?',
+					'context': header
+				}
+			)
+			if injury['score'] > score:
+				score = injury['score']
+				answer = injury['answer']
 		# only calculate the score if the verb is in the context
 		if verb not in context:
 			continue

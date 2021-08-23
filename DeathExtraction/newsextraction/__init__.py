@@ -5,6 +5,7 @@ import nltk
 try:
 	nltk.data.find('tokenizers/punkt')
 except LookupError:
+	nltk.data.find('tokenizers/averaged_perceptron_tagger')
 	nltk.download("punkt")
 
 
