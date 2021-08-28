@@ -13,16 +13,17 @@
 				<div class="card-footer d-flex align-items-center justify-content-between">
 					<button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#Modal"
 						onclick="selectedItem(
-									'{{ news.death }}', 
-									'{{ news.injury }}', 
-									'{{ news.day }}', 
-									'{{ news.month }}', 
-									'{{ news.year }}',
-									'{{ news.vehicle }}',
-									'{{ news.vehicleCode }}', 
-									'{{ news.location }}',
-									'{{ news.link }}'
-							
+									{
+										death: '{{ news.death }}', 
+										injury: '{{ news.injury }}', 
+										day: '{{ news.day }}', 
+										month: '{{ news.month }}', 
+										year:'{{ news.year }}',
+										vehicleType: '{{ news.vehicleType }}',
+										vechicleCode: '{{ news.vehicleCode }}', 
+										location: '{{ news.location }}',
+										link:'{{ news.link }}'
+									}
 								)">
 						View More
 					</button>
@@ -44,7 +45,7 @@
 										<h2>Extracted items</h2>
 										<div>Death Count: <span id="deathcount"></span></div>
 										<div>Injured Count: <span id="injuredcount"></span></div>
-										<!-- <div>Vehicle: <span id="vehicle"></span></div> -->
+										<div>Vehicles: <span id="vehicle"></span></div>
 										<div>Vehicle Number: <span id="vehicle_number"></span></div>
 										<div>Location: <span id="location"></span></div>
 										<div>Date: <span id="date"></span></div>
@@ -86,7 +87,9 @@
 	var countInjuryNumber = {}
 	{% for news in newsList %}
 	if ('{{ news.location }}' != "[]") {
-		locationList.push('{{ news.location }}')
+
+		if(locationList.indexOf('{{ news.location }}') < 0)
+			locationList.push('{{ news.location }}')
 
 		if (countAccident['{{ news.location }}'.toLowerCase()] == undefined)
 			countAccident['{{ news.location }}'.toLowerCase()] = 1

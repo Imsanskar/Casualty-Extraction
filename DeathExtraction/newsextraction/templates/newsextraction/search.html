@@ -39,16 +39,17 @@
 				<div class="card-footer d-flex align-items-center justify-content-between">
 					<button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#Modal"
 						onclick="selectedItem(
-									'{{ news.death }}', 
-									'{{ news.injury }}', 
-									'{{ news.day }}', 
-									'{{ news.month }}', 
-									'{{ news.year }}',
-									'{{ news.vehicle }}',
-									'{{ vehicle_number }}', 
-									'{{ news.location }}',
-									'{{ news.link }}'
-							
+									{
+										death: '{{ news.death }}', 
+										injury: '{{ news.injury }}', 
+										day: '{{ news.day }}', 
+										month: '{{ news.month }}', 
+										year:'{{ news.year }}',
+										vehicleType: '{{ news.vehicleType }}',
+										vechicleCode: '{{ news.vehicleCode }}', 
+										location: '{{ news.location }}',
+										link:'{{ news.link }}'
+									}
 								)">
 						View More
 					</button>

@@ -51,9 +51,9 @@ class DataExtractor:
 		locations =[]
 		locations=self.get_title_location_chunks()
 		if len(locations) != 0:
-			print(len(locations))
-		else:
-			locations= self.get_body_location_chunks()
+			print(locations)
+			return locations[0]
+		locations.extend(self.get_body_location_chunks())
 
 
 		return_value = locations
@@ -117,5 +117,9 @@ class DataExtractor:
 					vehicle = vehicle + str(p[0]) + " "
 				vehicles.append(vehicle[:-1])
 
-		return (vehicles)
+		returnString = ""
+		for v in vehicles:
+			returnString += "," + v
+
+		return returnString[1:]
 	

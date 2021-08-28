@@ -1,5 +1,5 @@
-# Casualty-Extraction
-
+# Casualty Information Extraction
+Casualty information extraction project uses the news from the link extracted using RSS feed. The news are scraped and from the text, and using that text various information such as death number, injury number, vehicles types are extracted.
 
 ## Build Instruction 
 ```
