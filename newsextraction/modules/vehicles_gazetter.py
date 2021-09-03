@@ -43,6 +43,9 @@ class VehicleInformation:
 		matcher.add("Vehicles", [[{LEMMA:'four'},{LEMMA:'wheeler'}]])
 
 	def find_vehicles(self):
+		"""
+			Returns the types of vehicles
+		"""
 		vehicles_found = set()
 		document = self.news_story
 		doc = nlp(document)

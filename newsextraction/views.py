@@ -13,6 +13,7 @@ from django.db.models import Q #object used to encapsulate a collection of keywo
 
 #runs at start of loading the webpage i.e is homepage, extracts info and load the page
 def index(request):
+	#initial check stores all the data in the database
 	initial_check()
 	news_list = rssdata.objects.all().order_by("-date")
 	return render(request, 'newsextraction/index.html', {
@@ -23,7 +24,7 @@ def index(request):
 
 
 
-#
+
 def extraction(request):
 	linkForm = NameForm()
 	if request.method == 'POST':

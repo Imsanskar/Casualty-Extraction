@@ -35,30 +35,6 @@ def parse(string):
 	return result
 
 
-"""
-	Extracts the info from the news story extracted using scrapper
-	Input:
-		newsStory: string from which info is to be extracted
-	Returns: Data Extractor object which contains methods object to extract the data
-"""
-def extractInfo(newsStory:str) -> DataExtractor:
-	# tokenizer object
-	newsTokenize = Tokenize(newsStory)
-
-	# sentence and word token of the news
-	sentenceToken = newsTokenize.sentenceTokenize()
-	wordToken = newsTokenize.wordTokenize()
-
-	# pos tagging of the tokenized objects
-	posTagger = Tagger(sentenceToken)
-	posTagedSentences = posTagger.tags()
-
-	# data extractor object which contains methods object to extract the data
-	extractedData = DataExtractor(posTagedSentences, newsStory)
-
-	# sentences = newsStory.split()
-	return extractedData
-
 #scrape rss feed
 #runs at start of loading website to extract necessary info before rendering the info
 def initial_check():
@@ -96,7 +72,15 @@ def initial_check():
 			
 			extract(links[i], texts, title[i],date[i], source[i])       
 
-#Apply tokenization and tagging
+"""
+returns the news database object based on the info available
+link: link of the news
+news_story: body of the news
+title: ofc, title of of the news
+date: date extracted from the news, needs to be improved, currently only date of the news availble
+source: .....
+save: flag to determine whether to store the news in the databse or not
+"""
 def extract(link, news_story, title, date, source, save = True):
 	if(len(news_story) == 0 or len(title) == 0):
 		return None
@@ -145,9 +129,9 @@ def extract(link, news_story, title, date, source, save = True):
 	oldlinks = rssdata.objects.values_list('link', flat=True) # need to link with models
 
 	if link in oldlinks:
+		# if the link is already in there so not save the object
 		save = False
 
-	#change this later
 	news_data = rssdata(header=title,
 					 source=source,
 					 body=str(news_story),
